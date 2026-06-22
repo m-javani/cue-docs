@@ -2,3 +2,55 @@
     height: 3rem !important;
     width: auto !important;
 }
+
+/* Font */
+:root {
+    --md-text-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.md-nav__item .md-nav__item--active {
+    font-size: 13pt !important;
+}
+
+li {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    font-size: 12pt !important;
+}
+
+
+.md-header__title {
+    font-size: 1.4rem !important;
+    font-weight: normal !important;
+    font-style: italic !important;
+    margin-left: -10px !important;
+    padding: 0 !important;
+}
+
+/* Navigation tabs in header */
+.md-tabs__list {
+    font-size: 0.9rem !important;
+    margin-bottom: 10px;
+    font-style: italic !important;
+}
+
+.md-tabs__link {
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 10px;
+    font-style: italic !important;
+}
+
+/* If you're using navigation.tabs feature, this targets the active tab */
+.md-tabs__item--active .md-tabs__link {
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 10px;
+    font-style: italic !important;
+}
+
+/* sidebar */
+/* Sidebar section titles (like "Cue" and "CueProxy") */
+.md-nav__item--nested .md-nav__link {
+    font-size: 13pt !important;
+}
