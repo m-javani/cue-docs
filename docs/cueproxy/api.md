@@ -27,3 +27,6 @@ Authorization: Bearer <token>
 Connect to `ws://localhost:8080/ws?token=<consumer_token>`
 
 See full message reference in the [CueProxy README](https://github.com/m-javani/cue-proxy).
+
+---
+

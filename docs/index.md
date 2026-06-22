@@ -19,3 +19,5 @@ It is designed for teams that need **reliable job dispatch** without operating c
 ---
 
 > **Cue is not a Kafka replacement.** It is a bounded, simple, and operationally light job queue.
+
+---

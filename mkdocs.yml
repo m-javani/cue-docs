@@ -7,6 +7,8 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
+  logo: assets/logos/logo-white.png
+  favicon: favicon.png
   palette:
     - scheme: default
       primary: indigo
@@ -30,6 +32,7 @@ theme:
     - content.tabs.link
     - search.suggest
     - search.highlight
+  
 
 nav:
   - Home: index.md
@@ -75,5 +78,6 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/m-javani/cue
-    - icon: fontawesome/brands/discord
-      link: https://discord.gg/cue
+      
+extra_css:
+  - stylesheets/extra.css

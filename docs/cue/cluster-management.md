@@ -36,3 +36,6 @@ curl -X POST http://localhost:8321/cluster/transfer-leader \
 ```
 
 All admin endpoints require a token with `admin` role.
+
+---
+

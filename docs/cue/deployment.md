@@ -2,26 +2,24 @@
 
 ## Docker
 
-```dockerfile
-FROM golang:1.21 AS builder
-RUN go build -o cue ./cmd/cue
+The official Dockerfile is located in the repository root.
 
-FROM alpine:latest
-COPY --from=builder /cue /usr/local/bin/
-EXPOSE 8321 8322 8323
-ENTRYPOINT ["cue", "serve"]
+```bash
+docker build -t cue:latest .
 ```
-
-## Kubernetes (StatefulSet)
-
-See the example in the [Cue README](https://github.com/m-javani/cue/blob/main/README.md).
-
-## Systemd
-
-```ini
-[Service]
-ExecStart=/usr/local/bin/cue serve -config /etc/cue/config.yml
-Restart=always
+### Run the container
+```bash
+docker run -d \
+  --name cue-node1 \
+  -p 8321:8321 \
+  -p 8322:8322 \
+  -p 8323:8323 \
+  -v ./data/node1:/data \
+  cue:latest \
+  serve -config /etc/cue/config.yml
 ```
 
 Recommended: Run **3, 5, or 7 nodes** for production.
+
+---
+

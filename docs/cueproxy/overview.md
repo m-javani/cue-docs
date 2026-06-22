@@ -15,3 +15,6 @@ graph TD
 - Completely stateless & horizontally scalable
 - Handles authentication, load balancing, and backpressure
 - Proxies communicate with Cue via QUIC
+
+---
+

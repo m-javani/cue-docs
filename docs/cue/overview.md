@@ -23,3 +23,5 @@ graph TD
 - Dead Letter Queue (DLQ) for failed jobs
 
 **CueProxy** acts as the stateless gateway for external communication.
+
+---
