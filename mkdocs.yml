@@ -1,4 +1,4 @@
-site_name: Cue Docs
+site_name: Cue
 site_description: Documentation for Cue - Distributed in-memory job queue with Raft
 site_url: https://m-javani.github.io/cue-docs/
 repo_url: https://github.com/m-javani/cue
@@ -10,21 +10,42 @@ theme:
   logo: assets/logos/logo-white.png
   favicon: favicon.png
   palette:
-    scheme: slate
-    primary: indigo
-    accent: cyan
-
+    # Light mode
+    - scheme: default
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+  
   features:
+    # Navigation enhancements
     - navigation.tabs
     - navigation.sections
     - navigation.expand
     - navigation.indexes
     - navigation.top
+    - navigation.instant        # Faster page loads
+    - navigation.instant.progress  # Loading progress bar
+    
+    # Content enhancements
     - content.code.copy
     - content.tabs.link
+    
+    # Search enhancements
     - search.suggest
     - search.highlight
-  
+    
+    # Visual enhancements
+    - header.autohide           # Cleaner look when scrolling
+    - toc.integrate             # Integrate table of contents with navigation (optional)
 
 nav:
   - Home: index.md
@@ -47,25 +68,8 @@ nav:
     - Deployment: cueproxy/deployment.md
     - Monitoring: cueproxy/monitoring.md
   - Contributing: contributing.md
-
-markdown_extensions:
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - admonition
-  - pymdownx.details
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - toc:
-      permalink: true
-
+  
+# Add these new sections for better visual design
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -74,6 +78,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/m-javani/cue-proxy
       name: CueProxy (Gateway)
-      
+
 extra_css:
+  - https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap
   - stylesheets/extra.css
