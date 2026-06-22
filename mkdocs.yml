@@ -1,34 +1,79 @@
-site_name: Cue
-site_description: Complete documentation for my project
-site_url: https://cue.github.io/m-javani/
+site_name: Cue Docs
+site_description: Documentation for Cue - Distributed in-memory job queue with Raft
+site_url: https://m-javani.github.io/cue-docs/
+repo_url: https://github.com/m-javani/cue
+repo_name: m-javani/cue
+edit_uri: edit/main/docs/
 
-# Theme (Material is the most popular)
 theme:
   name: material
   palette:
     - scheme: default
+      primary: indigo
+      accent: cyan
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
+      primary: indigo
+      accent: cyan
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - content.code.copy
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
 
-# Navigation structure
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - User Guide:
-    - Installation: guide/installation.md
-    - Configuration: guide/configuration.md
-    - Usage: guide/usage.md
-  - API Reference: api.md
-  - FAQ: faq.md
+  - Cue:
+    - Overview: cue/overview.md
+    - Installation: cue/installation.md
+    - Quick Start: cue/quickstart.md
+    - Configuration: cue/configuration.md
+    - Cluster Management: cue/cluster-management.md
+    - Monitoring: cue/monitoring.md
+    - Deployment: cue/deployment.md
+    - Limitations: cue/limitations.md
+  - CueProxy:
+    - Overview: cueproxy/overview.md
+    - Installation: cueproxy/installation.md
+    - Quick Start: cueproxy/quickstart.md
+    - API Reference: cueproxy/api.md
+    - Configuration: cueproxy/configuration.md
+    - Authentication: cueproxy/authentication.md
+    - Deployment: cueproxy/deployment.md
+    - Monitoring: cueproxy/monitoring.md
+  - Contributing: contributing.md
 
-# Extensions for better Markdown
 markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - admonition
-  - codehilite
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - toc:
       permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/m-javani/cue
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/cue
