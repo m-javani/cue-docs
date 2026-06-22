@@ -1,1 +1,34 @@
 site_name: Cue
+site_description: Complete documentation for my project
+site_url: https://cue.github.io/m-javani/
+
+# Theme (Material is the most popular)
+theme:
+  name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+# Navigation structure
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - User Guide:
+    - Installation: guide/installation.md
+    - Configuration: guide/configuration.md
+    - Usage: guide/usage.md
+  - API Reference: api.md
+  - FAQ: faq.md
+
+# Extensions for better Markdown
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
