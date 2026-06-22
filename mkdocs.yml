@@ -20,7 +20,7 @@ theme:
     # Dark mode
     - scheme: slate
       primary: indigo
-      accent: cyan
+      accent: lime
       toggle:
         icon: material/weather-night
         name: Switch to light mode
