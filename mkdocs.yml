@@ -10,18 +10,10 @@ theme:
   logo: assets/logos/logo-white.png
   favicon: favicon.png
   palette:
-    - scheme: default
-      primary: indigo
-      accent: cyan
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - scheme: slate
-      primary: indigo
-      accent: cyan
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
+    scheme: slate
+    primary: indigo
+    accent: cyan
+
   features:
     - navigation.tabs
     - navigation.sections
@@ -78,6 +70,10 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/m-javani/cue
+      name: Cue (Core)
+    - icon: fontawesome/brands/github
+      link: https://github.com/m-javani/cue-proxy
+      name: CueProxy (Gateway)
       
 extra_css:
   - stylesheets/extra.css
