@@ -962,22 +962,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-prerequisites" class="md-nav__link">
+  <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install Prerequisites
+        Prerequisites
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Install Prerequisites">
+    <nav class="md-nav" aria-label="Prerequisites">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#docker-docker-compose" class="md-nav__link">
+  <a href="#docker-compose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Docker &amp; Docker Compose
+        docker &amp; compose
       
     </span>
   </a>
@@ -985,10 +985,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#websocat-for-websocket-consumer" class="md-nav__link">
+  <a href="#websocat" class="md-nav__link">
     <span class="md-ellipsis">
       
-        websocat (for WebSocket consumer)
+        websocat
       
     </span>
   </a>
@@ -1001,10 +1001,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-everything" class="md-nav__link">
+  <a href="#start-all" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start Everything
+        start all
       
     </span>
   </a>
@@ -1015,7 +1015,7 @@
   <a href="#verify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        verify
       
     </span>
   </a>
@@ -1035,10 +1035,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-create-a-topic" class="md-nav__link">
+  <a href="#step-1-terminal-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1: Create a Topic
+        Step 1: Terminal 1
       
     </span>
   </a>
@@ -1046,10 +1046,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-terminal-1-subscribe-as-consumer" class="md-nav__link">
+  <a href="#step-2-terminal-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2: Terminal 1 - Subscribe as Consumer
+        Step 2: Terminal 1
       
     </span>
   </a>
@@ -1057,10 +1057,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-3-terminal-2-add-jobs" class="md-nav__link">
+  <a href="#step-3-terminal-2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Terminal 2 - Add Jobs
+        Step 3: Terminal 2
       
     </span>
   </a>
@@ -1084,10 +1084,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stop-everything" class="md-nav__link">
+  <a href="#stop-all" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Stop Everything
+        Stop All
       
     </span>
   </a>
@@ -1171,21 +1171,21 @@
   
 
 
-<p>You're absolutely right! Here's the updated Quick Start with a direct download link from the docs website:</p>
-<hr />
 <h1 id="quick-start">Quick Start</h1>
 <p>The fastest way to try Cue is with the <strong>pre-packaged demo environment</strong>.</p>
 <h2 id="download">Download</h2>
 <p><a href="../assets/demo/demo.zip">Download the demo zip here</a></p>
 <pre><code class="language-bash">cd demo
 </code></pre>
-<h2 id="install-prerequisites">Install Prerequisites</h2>
-<h3 id="docker-docker-compose">Docker &amp; Docker Compose</h3>
+<h2 id="prerequisites">Prerequisites</h2>
+<h3 id="docker-compose">docker &amp; compose</h3>
 <ul>
-<li><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> (macOS/Windows)</li>
-<li>Or <code>docker</code> and <code>docker compose</code> via your package manager (Linux)</li>
+<li>You need <code>docker</code> and <code>docker compose</code> installed on your machine</li>
 </ul>
-<h3 id="websocat-for-websocket-consumer">websocat (for WebSocket consumer)</h3>
+<h3 id="websocat">websocat</h3>
+<ul>
+<li>for consumer to open a WebSocket connection in terminal</li>
+</ul>
 <pre><code class="language-bash"># macOS
 brew install websocat
 
@@ -1199,7 +1199,7 @@ sudo dnf copr enable atim/websocat -y
 sudo dnf install websocat
 </code></pre>
 <hr />
-<h2 id="start-everything">Start Everything</h2>
+<h2 id="start-all">start all</h2>
 <pre><code class="language-bash">make all
 </code></pre>
 <p>This single command:
@@ -1214,7 +1214,7 @@ API: http://localhost:8080
 Health: curl http://localhost:8080/health
 </code></pre>
 <hr />
-<h2 id="verify">Verify</h2>
+<h2 id="verify">verify</h2>
 <pre><code class="language-bash">make health
 </code></pre>
 <p><strong>Expected output:</strong></p>
@@ -1225,14 +1225,20 @@ Health: curl http://localhost:8080/health
 <hr />
 <h2 id="try-it-out">Try It Out</h2>
 <p>You'll need <strong>two terminals</strong> for this demo.</p>
-<h3 id="step-1-create-a-topic">Step 1: Create a Topic</h3>
+<h3 id="step-1-terminal-1">Step 1: Terminal 1</h3>
+<ul>
+<li>Create a Topic (http)</li>
+</ul>
 <pre><code class="language-bash">make topic name=orders
 </code></pre>
 <p><strong>Expected output:</strong></p>
 <pre><code>Creating topic: orders
 {&quot;status&quot;:&quot;success&quot;}
 </code></pre>
-<h3 id="step-2-terminal-1-subscribe-as-consumer">Step 2: Terminal 1 - Subscribe as Consumer</h3>
+<h3 id="step-2-terminal-1">Step 2: Terminal 1</h3>
+<ul>
+<li>Subscribe as Consumer (websocket)</li>
+</ul>
 <pre><code class="language-bash">make subscribe topic=orders
 </code></pre>
 <p>This opens a WebSocket connection and waits for jobs.</p>
@@ -1240,7 +1246,10 @@ Health: curl http://localhost:8080/health
 <pre><code>Connecting to topic: orders (UUID: consumer-yourname)
 {&quot;action&quot;:&quot;accepted&quot;,&quot;topic&quot;:&quot;&quot;,&quot;jobId&quot;:&quot;&quot;,&quot;seqId&quot;:0,&quot;data&quot;:null}
 </code></pre>
-<h3 id="step-3-terminal-2-add-jobs">Step 3: Terminal 2 - Add Jobs</h3>
+<h3 id="step-3-terminal-2">Step 3: Terminal 2</h3>
+<ul>
+<li>Add Jobs (http)</li>
+</ul>
 <pre><code class="language-bash">make job topic=orders payload='{&quot;order_id&quot;: 1, &quot;amount&quot;: 99.99}'
 make job topic=orders payload='{&quot;order_id&quot;: 2, &quot;amount&quot;: 49.50}'
 make job topic=orders payload='{&quot;order_id&quot;: 3, &quot;amount&quot;: 150.00}'
@@ -1257,7 +1266,7 @@ make job topic=orders payload='{&quot;order_id&quot;: 3, &quot;amount&quot;: 150
 {&quot;action&quot;:&quot;job&quot;,&quot;topic&quot;:&quot;orders&quot;,&quot;jobId&quot;:&quot;job-1782218898-1598558&quot;,&quot;seqId&quot;:3,&quot;data&quot;:{&quot;order_id&quot;:3,&quot;amount&quot;:150.00}}
 </code></pre>
 <hr />
-<h2 id="stop-everything">Stop Everything</h2>
+<h2 id="stop-all">Stop All</h2>
 <pre><code class="language-bash">make stop
 </code></pre>
 <hr />
