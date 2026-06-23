@@ -532,22 +532,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-concepts" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Concepts
+        How It Works
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Key Concepts">
+    <nav class="md-nav" aria-label="How It Works">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#partition-management" class="md-nav__link">
+  <a href="#data-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Partition Management
+        Data Model
       
     </span>
   </a>
@@ -555,10 +555,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#consistency" class="md-nav__link">
+  <a href="#write-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Consistency
+        Write Path
       
     </span>
   </a>
@@ -566,32 +566,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#durability" class="md-nav__link">
+  <a href="#readdispatch-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Durability
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#reliability" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reliability
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Summary
+        Read/Dispatch Path
       
     </span>
   </a>
@@ -604,15 +582,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cluster-node-components" class="md-nav__link">
+  <a href="#key-concepts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cluster Node Components
+        Key Concepts
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Cluster Node Components">
+    <nav class="md-nav" aria-label="Key Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#raft-consensus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raft Consensus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write-ahead-log-wal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Write-Ahead Log (WAL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retries-failure-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retries &amp; Failure Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#component-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Component Overview">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -649,10 +677,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#partitions-routers" class="md-nav__link">
+  <a href="#partitions-router" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Partitions &amp; Routers
+        Partitions &amp; Router
       
     </span>
   </a>
@@ -670,7 +698,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#communication-matrix" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -678,11 +711,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1252,146 +1280,103 @@
 <p><strong>Cue</strong> is a distributed, in-memory job queue with strong consistency via Raft.</p>
 <h2 id="architecture">Architecture</h2>
 <p><img alt="Cue Cluster Architecture with Multiple Proxies" class="cluster-diagram" src="../../assets/images/leader-flow.png" /></p>
+<p><em>Clients communicate with the cluster through proxies. The leader handles all writes, with Raft ensuring consistency across followers.</em></p>
+<hr />
+<h2 id="how-it-works">How It Works</h2>
+<h3 id="data-model">Data Model</h3>
+<ul>
+<li><strong>Topics</strong> are logical partitions for organizing jobs</li>
+<li>Each topic is an in-memory state machine</li>
+<li>Every node holds all topics - no sharding or data loss on leader failover</li>
+<li><strong>No snapshots</strong> - state is fully in-memory (backed by WAL only)</li>
+</ul>
+<h3 id="write-path">Write Path</h3>
+<ol>
+<li>Proxy sends request to leader's <strong>Gateway</strong></li>
+<li>Gateway forwards to <strong>Cluster Agent</strong></li>
+<li>Agent proposes to <strong>Raft</strong> for consensus</li>
+<li>On commit, the <strong>Router</strong> directs to the correct <strong>Partition</strong></li>
+<li>Partition applies to state, response flows back to proxy</li>
+</ol>
+<h3 id="readdispatch-path">Read/Dispatch Path</h3>
+<ol>
+<li>Each partition dispatches jobs to proxies using round-robin selection, with batch sizes proportional to each proxy's number of subscribed consumers for that topic</li>
+<li>Jobs are sent back through <strong>Gateway</strong> to proxies</li>
+<li>Proxies load-balance to subscribed consumers</li>
+<li>Consumers ACK on completion → WAL truncation</li>
+</ol>
 <hr />
 <h2 id="key-concepts">Key Concepts</h2>
-<h3 id="partition-management">Partition Management</h3>
+<h3 id="raft-consensus">Raft Consensus</h3>
 <ul>
-<li>Every node holds <strong>all partitions (topics) in memory</strong></li>
-<li>No snapshots - state is fully in-memory only</li>
-<li>Partitions are not persisted to disk beyond the WAL</li>
+<li><strong>Strong consistency</strong> - all writes go through the leader</li>
+<li><strong>Automatic failover</strong> - on leader failure, a new leader is elected</li>
+<li><strong>Log replication</strong> across followers ensures durability</li>
 </ul>
-<h3 id="consistency">Consistency</h3>
+<h3 id="write-ahead-log-wal">Write-Ahead Log (WAL)</h3>
 <ul>
-<li><strong>Raft</strong> ensures linearizable consistency across the cluster</li>
-<li>All writes go through the leader</li>
-<li>Raft handles leader election and log replication</li>
+<li>Segmented files for <strong>durability</strong></li>
+<li>Truncated <strong>periodically</strong> up to the oldest safe index (all jobs ACK'd or DLQ'd)</li>
+<li>Result: <strong>WAL size stays limited</strong> - no unbounded growth</li>
 </ul>
-<h3 id="durability">Durability</h3>
-<ul>
-<li><strong>Write-Ahead Log (WAL)</strong> for durability</li>
-<li>Segmented WAL files for each partition</li>
-<li><strong>Truncation behavior:</strong></li>
-<li>WAL is truncated <strong>periodically</strong> up to the oldest job that received ack or moved to DLQ</li>
-<li>After <strong>max retries with exponential backoff</strong>, job moves to DLQ</li>
-<li>Result: <strong>WAL files are always limited</strong> - never grow unbounded</li>
-<li>No snapshots needed since WAL is continuously truncated</li>
-</ul>
-<h3 id="reliability">Reliability</h3>
+<h3 id="retries-failure-handling">Retries &amp; Failure Handling</h3>
 <ul>
 <li><strong>Automatic retries</strong> with exponential backoff</li>
-<li>Jobs are retried on failure</li>
-<li>Backoff prevents thundering herd</li>
-<li><strong>Dead Letter Queue (DLQ)</strong> for failed jobs</li>
-<li>After max retries exhausted</li>
-<li>Jobs move to DLQ for manual inspection</li>
-<li>WAL is then truncated for that segment</li>
+<li>After max retries, jobs move to <strong>Dead Letter Queue (DLQ)</strong></li>
+<li>DLQ jobs require manual inspection</li>
 </ul>
-<h3 id="summary">Summary</h3>
-<table>
-<thead>
-<tr>
-<th>Concept</th>
-<th>Implementation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>State</strong></td>
-<td>In-memory only - no snapshots</td>
-</tr>
-<tr>
-<td><strong>Durability</strong></td>
-<td>WAL with segmented files</td>
-</tr>
-<tr>
-<td><strong>Truncation</strong></td>
-<td>Periodically, up to a safe index</td>
-</tr>
-<tr>
-<td><strong>Retries</strong></td>
-<td>Exponential backoff</td>
-</tr>
-<tr>
-<td><strong>Failed Jobs</strong></td>
-<td>DLQ after max retries</td>
-</tr>
-<tr>
-<td><strong>WAL Size</strong></td>
-<td>Always limited - continuously truncated</td>
-</tr>
-</tbody>
-</table>
 <hr />
-<h2 id="cluster-node-components">Cluster Node Components</h2>
+<h2 id="component-overview">Component Overview</h2>
 <h3 id="gateway">Gateway</h3>
 <ul>
-<li>Dedicated <strong>QUIC server</strong> for proxy communication</li>
-<li>Own <strong>TLS certificate files</strong> (can be separate from cluster certs)</li>
-<li>Handles all external requests from proxies</li>
-<li>Routes requests to internal components</li>
+<li>QUIC server for <strong>proxy communication</strong></li>
+<li>Own TLS certificate files (can be separate from cluster certs)</li>
 </ul>
 <h3 id="cluster-agent">Cluster Agent</h3>
 <ul>
-<li>Manages <strong>node-to-node communication</strong></li>
-<li>Dedicated <strong>QUIC client/server</strong> for cluster internal traffic</li>
-<li>Can use <strong>separate certificate files</strong> or share the same certs as gateway</li>
-<li>Handles Raft peer communication and cluster membership</li>
+<li>Manages <strong>node-to-node</strong> QUIC communication</li>
+<li>Can share gateway certs or use separate ones</li>
 </ul>
 <h3 id="raft-layer">Raft Layer</h3>
 <ul>
-<li>Core <strong>consensus engine</strong> for the cluster</li>
-<li><strong>Shared storage</strong> for Raft logs</li>
-<li><strong>Decoupled</strong> from partitions - partitions don't manage Raft directly</li>
-<li>Handles leader election, log replication, and consistency</li>
+<li>Core <strong>consensus engine</strong> with shared storage</li>
+<li>Decoupled from partitions</li>
 </ul>
-<h3 id="partitions-routers">Partitions &amp; Routers</h3>
+<h3 id="partitions-router">Partitions &amp; Router</h3>
 <ul>
-<li><strong>Router</strong> directs requests to the correct partition based on topic</li>
-<li><strong>Partitions</strong> are the state machines for each topic</li>
-<li>Each partition maintains its own <strong>in-memory state</strong></li>
-<li>Partitions apply committed entries from Raft</li>
+<li><strong>Router</strong> directs requests by topic</li>
+<li><strong>Partitions</strong> are in-memory state machines for each topic</li>
 </ul>
 <h3 id="api-server">API Server</h3>
 <ul>
-<li>REST API for <strong>admin and control</strong> operations</li>
-<li>Health checks, cluster status, monitoring endpoints</li>
-<li>Prometheus metrics endpoint</li>
+<li><strong>Admin &amp; control</strong> REST API</li>
+<li>Health checks and Prometheus metrics</li>
 </ul>
 <hr />
-<h3 id="communication-matrix">Communication Matrix</h3>
+<h2 id="communication-matrix">Communication Matrix</h2>
 <table>
 <thead>
 <tr>
 <th>Component</th>
 <th>Protocol</th>
 <th>TLS</th>
-<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Gateway</strong></td>
+<td>Gateway → Proxies</td>
 <td>QUIC</td>
 <td>Own certs</td>
-<td>Proxy communication</td>
 </tr>
 <tr>
-<td><strong>Cluster Agent</strong></td>
+<td>Cluster Agent → Nodes</td>
 <td>QUIC</td>
 <td>Shared/separate certs</td>
-<td>Node-to-node</td>
 </tr>
 <tr>
-<td><strong>Raft</strong></td>
-<td>RPC</td>
-<td>Via Cluster Agent</td>
-<td>Consensus</td>
-</tr>
-<tr>
-<td><strong>API Server</strong></td>
+<td>API Server → Admin</td>
 <td>HTTP/REST</td>
 <td>Optional</td>
-<td>Admin</td>
 </tr>
 </tbody>
 </table>

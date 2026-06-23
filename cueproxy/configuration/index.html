@@ -1171,12 +1171,12 @@ tls:
   ca_path: &quot;certs/ca.pem&quot;
 
 address_resolver:
-  type: static  # static, dns, service, exec
+  type: static  # static, dns, service
   config:
     port: 8322
 
 tls_verifier:
-  type: cn  # cn, dns, spiffe, exec
+  type: cn  # cn, dns, spiffe
   config:
     domain: &quot;cluster.local&quot;
 </code></pre>
@@ -1205,11 +1205,6 @@ tls_verifier:
 <td>Service discovery (Consul/Nomad)</td>
 <td>TBD</td>
 </tr>
-<tr>
-<td><code>exec</code></td>
-<td>External script/command</td>
-<td>TBD</td>
-</tr>
 </tbody>
 </table>
 <h3 id="tls-verifier-types">TLS Verifier Types</h3>
@@ -1236,11 +1231,6 @@ tls_verifier:
 <td><code>spiffe</code></td>
 <td>SPIFFE ID verification</td>
 <td><code>trust_domain: "example.org"</code></td>
-</tr>
-<tr>
-<td><code>exec</code></td>
-<td>External verification</td>
-<td>TBD</td>
 </tr>
 </tbody>
 </table>

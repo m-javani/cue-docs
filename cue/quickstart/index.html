@@ -577,10 +577,165 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
+  <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Example
+        Download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install Prerequisites
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Install Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker &amp; Docker Compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#websocat-for-websocket-consumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        websocat (for WebSocket consumer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start Everything
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#try-it-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Try It Out
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Try It Out">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-a-topic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create a Topic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-terminal-1-subscribe-as-consumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Terminal 1 - Subscribe as Consumer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-terminal-2-add-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Terminal 2 - Add Jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#watch-the-consumer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Watch the Consumer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stop-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop Everything
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#makefile-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Makefile Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Endpoints
       
     </span>
   </a>
@@ -1093,19 +1248,181 @@
   
 
 
+<p>You're absolutely right! Here's the updated Quick Start with a direct download link from the docs website:</p>
+<hr />
 <h1 id="quick-start">Quick Start</h1>
-<ol>
-<li>Generate TLS certificates for the cluster</li>
-<li>Create a configuration file for each node</li>
-<li>Create <code>auth.yml</code></li>
-<li>Start at least 3 nodes</li>
-<li>Verify the cluster is healthy</li>
-</ol>
-<h2 id="example">Example</h2>
-<pre><code class="language-bash">./cue serve -config config-node1.yml
+<p>The fastest way to try Cue is with the <strong>pre-packaged demo environment</strong>.</p>
+<h2 id="download">Download</h2>
+<p><a href="../../assets/demo/demo.zip">Download the demo zip here</a></p>
+<pre><code class="language-bash">cd demo
 </code></pre>
-<p>Full configuration examples and multi-node startup scripts are available in the <a href="https://github.com/m-javani/cue">Cue repository</a>.
-```</p>
+<h2 id="install-prerequisites">Install Prerequisites</h2>
+<h3 id="docker-docker-compose">Docker &amp; Docker Compose</h3>
+<ul>
+<li><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> (macOS/Windows)</li>
+<li>Or <code>docker</code> and <code>docker compose</code> via your package manager (Linux)</li>
+</ul>
+<h3 id="websocat-for-websocket-consumer">websocat (for WebSocket consumer)</h3>
+<pre><code class="language-bash"># macOS
+brew install websocat
+
+# Linux (Ubuntu/Debian) - download binary
+wget https://github.com/vi/websocat/releases/latest/download/websocat.x86_64-unknown-linux-musl -O websocat
+chmod +x websocat
+sudo mv websocat /usr/local/bin/
+
+# Linux (Fedora/RHEL)
+sudo dnf copr enable atim/websocat -y
+sudo dnf install websocat
+</code></pre>
+<hr />
+<h2 id="start-everything">Start Everything</h2>
+<pre><code class="language-bash">make all
+</code></pre>
+<p>This single command:
+- Clones the source repositories
+- Builds the binaries
+- Builds Docker images
+- Generates TLS certificates
+- Starts the cluster and proxy</p>
+<p><strong>Expected output:</strong></p>
+<pre><code>✅ All services started!
+API: http://localhost:8080
+Health: curl http://localhost:8080/health
+</code></pre>
+<hr />
+<h2 id="verify">Verify</h2>
+<pre><code class="language-bash">make health
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre><code>✅ node1 healthy
+✅ node2 healthy
+✅ node3 healthy
+</code></pre>
+<hr />
+<h2 id="try-it-out">Try It Out</h2>
+<p>You'll need <strong>two terminals</strong> for this demo.</p>
+<h3 id="step-1-create-a-topic">Step 1: Create a Topic</h3>
+<pre><code class="language-bash">make topic name=orders
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre><code>Creating topic: orders
+{&quot;status&quot;:&quot;success&quot;}
+</code></pre>
+<h3 id="step-2-terminal-1-subscribe-as-consumer">Step 2: Terminal 1 - Subscribe as Consumer</h3>
+<pre><code class="language-bash">make subscribe topic=orders
+</code></pre>
+<p>This opens a WebSocket connection and waits for jobs.</p>
+<p><strong>Expected output:</strong></p>
+<pre><code>Connecting to topic: orders (UUID: consumer-yourname)
+{&quot;action&quot;:&quot;accepted&quot;,&quot;topic&quot;:&quot;&quot;,&quot;jobId&quot;:&quot;&quot;,&quot;seqId&quot;:0,&quot;data&quot;:null}
+</code></pre>
+<h3 id="step-3-terminal-2-add-jobs">Step 3: Terminal 2 - Add Jobs</h3>
+<pre><code class="language-bash">make job topic=orders payload='{&quot;order_id&quot;: 1, &quot;amount&quot;: 99.99}'
+make job topic=orders payload='{&quot;order_id&quot;: 2, &quot;amount&quot;: 49.50}'
+make job topic=orders payload='{&quot;order_id&quot;: 3, &quot;amount&quot;: 150.00}'
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre><code>Adding job to topic: orders (ID: job-1782218880-1598043)
+{&quot;job_id&quot;:&quot;job-1782218880-1598043&quot;,&quot;status&quot;:&quot;success&quot;}
+</code></pre>
+<h3 id="watch-the-consumer">Watch the Consumer</h3>
+<p>In Terminal 1, you'll see jobs arriving in real-time:</p>
+<pre><code class="language-json">{&quot;action&quot;:&quot;accepted&quot;,&quot;topic&quot;:&quot;&quot;,&quot;jobId&quot;:&quot;&quot;,&quot;seqId&quot;:0,&quot;data&quot;:null}
+{&quot;action&quot;:&quot;job&quot;,&quot;topic&quot;:&quot;orders&quot;,&quot;jobId&quot;:&quot;job-1782218880-1598043&quot;,&quot;seqId&quot;:1,&quot;data&quot;:{&quot;order_id&quot;:1,&quot;amount&quot;:99.99}}
+{&quot;action&quot;:&quot;job&quot;,&quot;topic&quot;:&quot;orders&quot;,&quot;jobId&quot;:&quot;job-1782218892-1598362&quot;,&quot;seqId&quot;:2,&quot;data&quot;:{&quot;order_id&quot;:2,&quot;amount&quot;:49.50}}
+{&quot;action&quot;:&quot;job&quot;,&quot;topic&quot;:&quot;orders&quot;,&quot;jobId&quot;:&quot;job-1782218898-1598558&quot;,&quot;seqId&quot;:3,&quot;data&quot;:{&quot;order_id&quot;:3,&quot;amount&quot;:150.00}}
+</code></pre>
+<hr />
+<h2 id="stop-everything">Stop Everything</h2>
+<pre><code class="language-bash">make stop
+</code></pre>
+<hr />
+<h2 id="makefile-commands">Makefile Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>make all</code></td>
+<td>Clone repos, build binaries, generate certs, and start everything</td>
+</tr>
+<tr>
+<td><code>make start</code></td>
+<td>Start services (certs must already exist)</td>
+</tr>
+<tr>
+<td><code>make stop</code></td>
+<td>Stop all services</td>
+</tr>
+<tr>
+<td><code>make health</code></td>
+<td>Check health of all services</td>
+</tr>
+<tr>
+<td><code>make topic name=&lt;topic&gt;</code></td>
+<td>Create a new topic</td>
+</tr>
+<tr>
+<td><code>make job topic=&lt;topic&gt; payload='&lt;json&gt;'</code></td>
+<td>Add a job to a topic</td>
+</tr>
+<tr>
+<td><code>make subscribe topic=&lt;topic&gt;</code></td>
+<td>Subscribe as consumer (WebSocket)</td>
+</tr>
+<tr>
+<td><code>make logs</code></td>
+<td>View live logs</td>
+</tr>
+<tr>
+<td><code>make clean</code></td>
+<td>Stop and remove everything</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="api-endpoints">API Endpoints</h2>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/health</code></td>
+<td>GET</td>
+<td>Health check</td>
+</tr>
+<tr>
+<td><code>/metrics</code></td>
+<td>GET</td>
+<td>Prometheus metrics</td>
+</tr>
+<tr>
+<td><code>/producer/topic</code></td>
+<td>POST</td>
+<td>Create a topic</td>
+</tr>
+<tr>
+<td><code>/producer/job</code></td>
+<td>POST</td>
+<td>Add a job</td>
+</tr>
+<tr>
+<td><code>/ws</code></td>
+<td>WebSocket</td>
+<td>Subscribe as consumer</td>
+</tr>
+</tbody>
+</table>
 <hr />
 
 
