@@ -1,0 +1,6 @@
+FROM alpine:latest
+RUN apk add --no-cache ca-certificates tzdata curl
+COPY cueproxy /cueproxy
+RUN chmod +x /cueproxy
+EXPOSE 8080 8322
+ENTRYPOINT ["/cueproxy"]

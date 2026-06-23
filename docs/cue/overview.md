@@ -6,92 +6,83 @@
 
 ![Cue Cluster Architecture with Multiple Proxies](../assets/images/leader-flow.png){: .cluster-diagram }
 
+*Clients communicate with the cluster through proxies. The leader handles all writes, with Raft ensuring consistency across followers.*
+
+---
+
+## How It Works
+
+### Data Model
+- **Topics** are logical partitions for organizing jobs
+- Each topic is an in-memory state machine
+- Every node holds all topics - no sharding or data loss on leader failover
+- **No snapshots** - state is fully in-memory (backed by WAL only)
+
+### Write Path
+1. Proxy sends request to leader's **Gateway**
+2. Gateway forwards to **Cluster Agent**
+3. Agent proposes to **Raft** for consensus
+4. On commit, the **Router** directs to the correct **Partition**
+5. Partition applies to state, response flows back to proxy
+
+### Read/Dispatch Path
+1. Each partition dispatches jobs to proxies using round-robin selection, with batch sizes proportional to each proxy's number of subscribed consumers for that topic
+2. Jobs are sent back through **Gateway** to proxies
+3. Proxies load-balance to subscribed consumers
+4. Consumers ACK on completion → WAL truncation
+
 ---
 
 ## Key Concepts
 
-### Partition Management
-- Every node holds **all partitions (topics) in memory**
-- No snapshots - state is fully in-memory only
-- Partitions are not persisted to disk beyond the WAL
+### Raft Consensus
+- **Strong consistency** - all writes go through the leader
+- **Automatic failover** - on leader failure, a new leader is elected
+- **Log replication** across followers ensures durability
 
-### Consistency
-- **Raft** ensures linearizable consistency across the cluster
-- All writes go through the leader
-- Raft handles leader election and log replication
+### Write-Ahead Log (WAL)
+- Segmented files for **durability**
+- Truncated **periodically** up to the oldest safe index (all jobs ACK'd or DLQ'd)
+- Result: **WAL size stays limited** - no unbounded growth
 
-### Durability
-- **Write-Ahead Log (WAL)** for durability
-- Segmented WAL files for each partition
-- **Truncation behavior:**
-  - WAL is truncated **periodically** up to the oldest job that received ack or moved to DLQ
-  - After **max retries with exponential backoff**, job moves to DLQ
-  - Result: **WAL files are always limited** - never grow unbounded
-  - No snapshots needed since WAL is continuously truncated
-
-### Reliability
+### Retries & Failure Handling
 - **Automatic retries** with exponential backoff
-  - Jobs are retried on failure
-  - Backoff prevents thundering herd
-- **Dead Letter Queue (DLQ)** for failed jobs
-  - After max retries exhausted
-  - Jobs move to DLQ for manual inspection
-  - WAL is then truncated for that segment
-
-### Summary
-
-| Concept | Implementation |
-|---------|---------------|
-| **State** | In-memory only - no snapshots |
-| **Durability** | WAL with segmented files |
-| **Truncation** | Periodically, up to a safe index|
-| **Retries** | Exponential backoff |
-| **Failed Jobs** | DLQ after max retries |
-| **WAL Size** | Always limited - continuously truncated |
+- After max retries, jobs move to **Dead Letter Queue (DLQ)**
+- DLQ jobs require manual inspection
 
 ---
 
-## Cluster Node Components
+## Component Overview
 
 ### Gateway
-- Dedicated **QUIC server** for proxy communication
-- Own **TLS certificate files** (can be separate from cluster certs)
-- Handles all external requests from proxies
-- Routes requests to internal components
+- QUIC server for **proxy communication**
+- Own TLS certificate files (can be separate from cluster certs)
 
 ### Cluster Agent
-- Manages **node-to-node communication**
-- Dedicated **QUIC client/server** for cluster internal traffic
-- Can use **separate certificate files** or share the same certs as gateway
-- Handles Raft peer communication and cluster membership
+- Manages **node-to-node** QUIC communication
+- Can share gateway certs or use separate ones
 
 ### Raft Layer
-- Core **consensus engine** for the cluster
-- **Shared storage** for Raft logs
-- **Decoupled** from partitions - partitions don't manage Raft directly
-- Handles leader election, log replication, and consistency
+- Core **consensus engine** with shared storage
+- Decoupled from partitions
 
-### Partitions & Routers
-- **Router** directs requests to the correct partition based on topic
-- **Partitions** are the state machines for each topic
-- Each partition maintains its own **in-memory state**
-- Partitions apply committed entries from Raft
+### Partitions & Router
+- **Router** directs requests by topic
+- **Partitions** are in-memory state machines for each topic
 
 ### API Server
-- REST API for **admin and control** operations
-- Health checks, cluster status, monitoring endpoints
-- Prometheus metrics endpoint
+- **Admin & control** REST API
+- Health checks and Prometheus metrics
 
 ---
 
-### Communication Matrix
+## Communication Matrix
 
-| Component | Protocol | TLS | Purpose |
-|-----------|----------|-----|---------|
-| **Gateway** | QUIC | Own certs | Proxy communication |
-| **Cluster Agent** | QUIC | Shared/separate certs | Node-to-node |
-| **Raft** | RPC | Via Cluster Agent | Consensus |
-| **API Server** | HTTP/REST | Optional | Admin |
+| Component | Protocol | TLS |
+|-----------|----------|-----|
+| Gateway → Proxies | QUIC | Own certs |
+| Cluster Agent → Nodes | QUIC | Shared/separate certs |
+| API Server → Admin | HTTP/REST | Optional |
 
 ---
 

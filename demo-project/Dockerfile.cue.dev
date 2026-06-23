@@ -1,0 +1,6 @@
+FROM alpine:latest
+RUN apk add --no-cache ca-certificates tzdata curl
+COPY cue /cue
+RUN chmod +x /cue
+EXPOSE 8321 8322 8323
+ENTRYPOINT ["/cue"]

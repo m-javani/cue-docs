@@ -42,12 +42,12 @@ tls:
   ca_path: "certs/ca.pem"
 
 address_resolver:
-  type: static  # static, dns, service, exec
+  type: static  # static, dns, service
   config:
     port: 8322
 
 tls_verifier:
-  type: cn  # cn, dns, spiffe, exec
+  type: cn  # cn, dns, spiffe
   config:
     domain: "cluster.local"
 ```
@@ -59,7 +59,6 @@ tls_verifier:
 | `static` | Fixed list of node addresses | `peers: {node1: "192.168.1.10:8322"}` |
 | `dns` | DNS SRV record resolution | `domain: "cue-cluster.local"` |
 | `service` | Service discovery (Consul/Nomad) | TBD |
-| `exec` | External script/command | TBD |
 
 ### TLS Verifier Types
 
@@ -68,4 +67,3 @@ tls_verifier:
 | `cn` | Verify Common Name | None |
 | `dns` | Verify DNS name | `domain: "cluster.local"` |
 | `spiffe` | SPIFFE ID verification | `trust_domain: "example.org"` |
-| `exec` | External verification | TBD |

@@ -62,7 +62,7 @@ logging:
 
 # Service discovery
 address_resolver:
-  type: static                        # static, dns, service, exec
+  type: static                        # static, dns, service
   config:
     peers:                            # For static resolver
       node1: "192.168.1.10:8323"
@@ -73,7 +73,7 @@ address_resolver:
 
 # TLS verification
 tls_verifier:
-  type: cn                            # cn, dns, spiffe, exec
+  type: cn                            # cn, dns, spiffe
   # config:
   #   domain: "cluster.local"         # For DNS verifier
   #   trust_domain: "example.org"     # For SPIFFE verifier
@@ -86,7 +86,6 @@ tls_verifier:
 | `static` | Fixed mapping of node IDs to addresses | `peers: {node1: "192.168.1.10:8323"}` |
 | `dns` | DNS SRV record resolution | `domain: "cue-cluster.local"` |
 | `service` | Service discovery (Consul/Nomad) | None needed |
-| `exec` | External script/command | TBD |
 
 ### TLS Verifier Types
 
@@ -95,4 +94,3 @@ tls_verifier:
 | `cn` | Verify Common Name matches node ID | None |
 | `dns` | Verify DNS name | `domain: "cluster.local"` |
 | `spiffe` | SPIFFE ID verification | `trust_domain: "example.org"` |
-| `exec` | External verification | TBD |

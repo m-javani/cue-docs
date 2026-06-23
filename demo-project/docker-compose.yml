@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  node1:
+    image: cue-demo:latest
+    container_name: node1
+    hostname: node1
+    networks:
+      cue-net:
+        ipv4_address: 172.21.0.10
+    volumes:
+      - ./certs:/certs:ro
+      - ./configs/cue:/opt/cue/configs:ro
+      - ./data/node1:/opt/cue/data
+    command: >
+      serve --config /opt/cue/configs/config.yml --api-token-path /opt/cue/configs/auth.yml --node-id node1 --data-dir /opt/cue/data --cluster-cert /certs/node1/cert.pem --cluster-key /certs/node1/key.pem --cluster-ca /certs/ca_cert.pem --proxy-cert /certs/node1/cert.pem --proxy-key /certs/node1/key.pem --proxy-ca /certs/ca_cert.pem --initial-voters node1,node2,node3 --peers node1,node2,node3 --log-level info
+    cap_add:
+      - NET_ADMIN
+
+  node2:
+    image: cue-demo:latest
+    container_name: node2
+    hostname: node2
+    networks:
+      cue-net:
+        ipv4_address: 172.21.0.11
+    volumes:
+      - ./certs:/certs:ro
+      - ./configs/cue:/opt/cue/configs:ro
+      - ./data/node2:/opt/cue/data
+    command: >
+      serve --config /opt/cue/configs/config.yml --api-token-path /opt/cue/configs/auth.yml --node-id node2 --data-dir /opt/cue/data --cluster-cert /certs/node2/cert.pem --cluster-key /certs/node2/key.pem --cluster-ca /certs/ca_cert.pem --proxy-cert /certs/node2/cert.pem --proxy-key /certs/node2/key.pem --proxy-ca /certs/ca_cert.pem --initial-voters node1,node2,node3 --peers node1,node2,node3 --log-level info
+    cap_add:
+      - NET_ADMIN
+
+  node3:
+    image: cue-demo:latest
+    container_name: node3
+    hostname: node3
+    networks:
+      cue-net:
+        ipv4_address: 172.21.0.12
+    volumes:
+      - ./certs:/certs:ro
+      - ./configs/cue:/opt/cue/configs:ro
+      - ./data/node3:/opt/cue/data
+    command: >
+      serve --config /opt/cue/configs/config.yml --api-token-path /opt/cue/configs/auth.yml --node-id node3 --data-dir /opt/cue/data --cluster-cert /certs/node3/cert.pem --cluster-key /certs/node3/key.pem --cluster-ca /certs/ca_cert.pem --proxy-cert /certs/node3/cert.pem --proxy-key /certs/node3/key.pem --proxy-ca /certs/ca_cert.pem --initial-voters node1,node2,node3 --peers node1,node2,node3 --log-level info
+    cap_add:
+      - NET_ADMIN
+
+  proxy1:
+    image: cueproxy-demo:latest
+    container_name: proxy1
+    hostname: proxy1
+    networks:
+      cue-net:
+        ipv4_address: 172.21.0.20
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./certs:/certs:ro
+      - ./configs/cueproxy:/opt/cueproxy/configs:ro
+    command: >
+      --config /opt/cueproxy/configs/config.yml --auth-file /opt/cueproxy/configs/auth.yml --proxy-id proxy1 --api-host 0.0.0.0 --api-port 8080 --quic-addr 0.0.0.0 --quic-port 8322 --cert /certs/proxy1/cert.pem --key /certs/proxy1/key.pem --ca /certs/ca_cert.pem --seed node1,node2,node3 --log-level info
+    cap_add:
+      - NET_ADMIN
+
+networks:
+  cue-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
