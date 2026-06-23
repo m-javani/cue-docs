@@ -52,5 +52,10 @@ li {
 /* sidebar */
 /* Sidebar section titles (like "Cue" and "CueProxy") */
 .md-nav__item--nested .md-nav__link {
-    font-size: 13pt !important;
+    font-size: 10pt !important;
+}
+
+.proxy-diagram {
+    width: 800px;
+    height: auto;
 }

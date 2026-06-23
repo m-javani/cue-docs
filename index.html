@@ -136,7 +136,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
@@ -421,6 +421,50 @@
     <span class="md-ellipsis">
       
         Core Components
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-cue-guarantees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Cue Guarantees
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-cue-does-not-guarantee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Cue Does Not Guarantee
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-honest-promise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Honest Promise
       
     </span>
   </a>
@@ -1107,6 +1151,25 @@
 <li><strong><a href="cue/overview/">Cue</a></strong> — The distributed cluster (3/5/7 nodes)</li>
 <li><strong><a href="cueproxy/overview/">CueProxy</a></strong> — Stateless HTTP &amp; WebSocket gateway</li>
 </ul>
+<h2 id="architecture">Architecture</h2>
+<p><img alt="Cue Cluster Architecture with Multiple Proxies" class="cluster-diagram" src="assets/images/diagram.png" /></p>
+<hr />
+<h2 id="what-cue-guarantees">What Cue Guarantees</h2>
+<ul>
+<li>No job loss (Raft WAL survives total cluster crash)</li>
+<li>At-least-once delivery (duplicates possible, idempotent consumers required for exactly-once)</li>
+<li>Automatic retries with exponential backoff</li>
+<li>Dead letter file with rotation</li>
+<li>Bounded queues with clear backpressure</li>
+</ul>
+<h2 id="what-cue-does-not-guarantee">What Cue Does Not Guarantee</h2>
+<ul>
+<li>Infinite queue size</li>
+<li>Exactly-once without client idempotency</li>
+</ul>
+<h2 id="the-honest-promise">The Honest Promise</h2>
+<p>Cue is simple to operate, bounded by design, and honest about its limits. Teams that need Kafka's endless persistence should use Kafka. Teams that need Redis Pub/Sub's fire-and-forget should use Redis. Teams that need an in-memory, durable, retrying job queue with straightforward operations should use Cue.</p>
+<hr />
 <h2 id="quick-links">Quick Links</h2>
 <ul>
 <li><a href="cue/quickstart/">Cue Quick Start</a></li>
@@ -1114,10 +1177,6 @@
 <li><a href="https://github.com/m-javani/cue">Cue GitHub</a></li>
 <li><a href="https://github.com/m-javani/cue-proxy">CueProxy GitHub</a></li>
 </ul>
-<hr />
-<blockquote>
-<p><strong>Cue is not a Kafka replacement.</strong> It is a bounded, simple, and operationally light job queue.</p>
-</blockquote>
 <hr />
 
 

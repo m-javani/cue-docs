@@ -138,7 +138,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
@@ -834,6 +834,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#proxy-components-and-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proxy Components and Flows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Proxy Components and Flows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-producer-add-topic-flow-synchronous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Producer Add Topic Flow (Synchronous)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-producer-add-job-flow-synchronous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Producer Add Job Flow (Synchronous)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-consumer-subscribe-job-dispatch-flow-asynchronous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Consumer Subscribe &amp; Job Dispatch Flow (Asynchronous)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1095,18 +1145,165 @@
 
 <h1 id="cueproxy-overview">CueProxy Overview</h1>
 <p><strong>CueProxy</strong> is the stateless HTTP and WebSocket gateway for Cue.</p>
-<h2 id="architecture">Architecture</h2>
-<pre><code class="language-mermaid">graph TD
-    A[Producers] --&gt; B[CueProxy Instances]
-    C[Consumers] --&gt; B
-    B &lt;--&gt; D[Cue Cluster Leader]
-    style B fill:#2196F3
-</code></pre>
 <ul>
 <li>Completely stateless &amp; horizontally scalable</li>
-<li>Handles authentication, load balancing, and backpressure</li>
+<li>Handles authentication, load balances outflow to consumers subscribed to a topic, and applies backpressure</li>
 <li>Proxies communicate with Cue via QUIC</li>
 </ul>
+<hr />
+<h3 id="architecture">Architecture</h3>
+<p><img alt="Cue Cluster Architecture with Multiple Proxies" class="proxy-diagram" src="../../assets/images/proxy-flow.png" /></p>
+<hr />
+<h3 id="proxy-components-and-flows">Proxy Components and Flows</h3>
+<h4 id="1-producer-add-topic-flow-synchronous">1. Producer Add Topic Flow (Synchronous)</h4>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Direction</th>
+<th>Action</th>
+<th>Protocol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Producer → API</td>
+<td>Send add topic request</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>API → Cluster Agent</td>
+<td>Forward request</td>
+<td>Internal</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Cluster Agent → Leader</td>
+<td>Propose topic creation</td>
+<td>QUIC</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Leader → Cluster Agent</td>
+<td>Topic created response</td>
+<td>QUIC</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Cluster Agent → API</td>
+<td>Pass response back</td>
+<td>Internal</td>
+</tr>
+<tr>
+<td>6</td>
+<td>API → Producer</td>
+<td>Return success/failure</td>
+<td>HTTP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="2-producer-add-job-flow-synchronous">2. Producer Add Job Flow (Synchronous)</h4>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Direction</th>
+<th>Action</th>
+<th>Protocol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Producer → API</td>
+<td>Send add job request</td>
+<td>HTTP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>API → Cluster Agent</td>
+<td>Forward request</td>
+<td>Internal</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Cluster Agent → Leader</td>
+<td>Propose write to Raft</td>
+<td>QUIC</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Leader → Cluster Agent</td>
+<td>Job committed response</td>
+<td>QUIC</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Cluster Agent → API</td>
+<td>Pass response back</td>
+<td>Internal</td>
+</tr>
+<tr>
+<td>6</td>
+<td>API → Producer</td>
+<td>Return ACK</td>
+<td>HTTP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="3-consumer-subscribe-job-dispatch-flow-asynchronous">3. Consumer Subscribe &amp; Job Dispatch Flow (Asynchronous)</h4>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Direction</th>
+<th>Action</th>
+<th>Protocol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Consumer → API</td>
+<td>Subscribe to topic</td>
+<td>WebSocket</td>
+</tr>
+<tr>
+<td>2</td>
+<td>API → Consumer</td>
+<td>Subscription confirmed</td>
+<td>WebSocket</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Leader → Cluster Agent</td>
+<td>Dispatched jobs</td>
+<td>QUIC</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Cluster Agent → API</td>
+<td>Pass jobs</td>
+<td>Internal</td>
+</tr>
+<tr>
+<td>5</td>
+<td>API → Consumer(s)</td>
+<td>Deliver job (load balanced by topic)</td>
+<td>WebSocket</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Consumer → API</td>
+<td>Process ACK</td>
+<td>WebSocket</td>
+</tr>
+</tbody>
+</table>
 <hr />
 
 
