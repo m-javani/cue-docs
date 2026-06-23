@@ -51,8 +51,6 @@ nav:
   - Home: index.md
   - Cue:
     - Overview: cue/overview.md
-    - Installation: cue/installation.md
-    - Quick Start: cue/quickstart.md
     - Configuration: cue/configuration.md
     - Cluster Management: cue/cluster-management.md
     - Monitoring: cue/monitoring.md
@@ -60,13 +58,12 @@ nav:
     - Limitations: cue/limitations.md
   - CueProxy:
     - Overview: cueproxy/overview.md
-    - Installation: cueproxy/installation.md
-    - Quick Start: cueproxy/quickstart.md
     - API Reference: cueproxy/api.md
     - Configuration: cueproxy/configuration.md
     - Authentication: cueproxy/authentication.md
     - Deployment: cueproxy/deployment.md
     - Monitoring: cueproxy/monitoring.md
+  - Quick-Start: quickstart.md
   - Contributing: contributing.md
   
 # Add these new sections for better visual design
