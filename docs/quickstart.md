@@ -1,7 +1,3 @@
-You're absolutely right! Here's the updated Quick Start with a direct download link from the docs website:
-
----
-
 # Quick Start
 
 The fastest way to try Cue is with the **pre-packaged demo environment**.
@@ -14,13 +10,13 @@ The fastest way to try Cue is with the **pre-packaged demo environment**.
 cd demo
 ```
 
-## Install Prerequisites
+## Prerequisites
 
-### Docker & Docker Compose
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (macOS/Windows)
-- Or `docker` and `docker compose` via your package manager (Linux)
+### docker & compose
+- You need `docker` and `docker compose` installed on your machine
 
-### websocat (for WebSocket consumer)
+### websocat
+- for consumer to open a WebSocket connection in terminal
 
 ```bash
 # macOS
@@ -38,7 +34,7 @@ sudo dnf install websocat
 
 ---
 
-## Start Everything
+## start all
 
 ```bash
 make all
@@ -60,7 +56,7 @@ Health: curl http://localhost:8080/health
 
 ---
 
-## Verify
+## verify
 
 ```bash
 make health
@@ -79,7 +75,8 @@ make health
 
 You'll need **two terminals** for this demo.
 
-### Step 1: Create a Topic
+### Step 1: Terminal 1
+- Create a Topic (http)
 
 ```bash
 make topic name=orders
@@ -91,7 +88,8 @@ Creating topic: orders
 {"status":"success"}
 ```
 
-### Step 2: Terminal 1 - Subscribe as Consumer
+### Step 2: Terminal 1
+- Subscribe as Consumer (websocket)
 
 ```bash
 make subscribe topic=orders
@@ -105,7 +103,8 @@ Connecting to topic: orders (UUID: consumer-yourname)
 {"action":"accepted","topic":"","jobId":"","seqId":0,"data":null}
 ```
 
-### Step 3: Terminal 2 - Add Jobs
+### Step 3: Terminal 2
+ - Add Jobs (http)
 
 ```bash
 make job topic=orders payload='{"order_id": 1, "amount": 99.99}'
@@ -132,7 +131,7 @@ In Terminal 1, you'll see jobs arriving in real-time:
 
 ---
 
-## Stop Everything
+## Stop All
 
 ```bash
 make stop
