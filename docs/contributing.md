@@ -15,10 +15,6 @@ The main development happens in two repositories:
 
 Please follow our **[Code of Conduct](https://github.com/m-javani/cue/blob/main/CODE_OF_CONDUCT.md)** in all your interactions with the project.
 
-### Contribution Guidelines
-
-Please read the full **[Contributing Guide](https://github.com/m-javani/cue/blob/main/CONTRIBUTING.md)** before submitting Pull Requests.
-
 ---
 
 **Note:** Both `cue` and `cue-proxy` repositories follow the **same Code of Conduct** and similar contribution guidelines.
