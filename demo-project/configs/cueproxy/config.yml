@@ -12,21 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-proxy_id: ""  # Auto-generated if empty
-
 api:
   host: "0.0.0.0"
   port: 8080
-  websocket_read_buffer_size: 1024
-  websocket_write_buffer_size: 1024
   read_timeout: "30s"
   write_timeout: "30s"
   idle_timeout: "120s"
-  score_update_interval: "300ms"
   default_max_inflights: 10
-  producer_req_buffer_size: 1000
-  consumer_buffer_size: 1000
-  max_jobs_per_topic: 10000
+  auth_path: "config/auth.yml"
+  tls_enabled: false  # Set to true to enable HTTPS for API
+  cert_path: "certs/api-cert.pem"
+  key_path: "certs/api-key.pem"
+  ca_path: "certs/api-ca.pem"
 
 cluster:
   quic_addr: "0.0.0.0"
@@ -35,27 +32,15 @@ cluster:
     - node1
     - node2
     - node3
-  heartbeat_interval: "1s"
-  request_timeout: "30s"
-  reconnect_delay: "5s"
-  max_message_size: 1048576
-
-auth:
-  file: "config/auth.yml"
-  reload_interval: "30s"
-
-tls:
-  cert_path: "certs/cert.pem"
-  key_path: "certs/key.pem"
-  ca_path: "certs/ca.pem"
-
-address_resolver:
-  type: service # service, dns, static
-  # config:
-    # domain: ""
-    # port: 8323
-
-tls_verifier:
-  type: cn # cn, dns, spiffe
-  # config:
-  #   domain: "localhost"
+  cert_path: "certs/cluster-cert.pem"
+  key_path: "certs/cluster-key.pem"
+  ca_path: "certs/cluster-ca.pem"
+  address_resolver:
+    type: service  # service, dns, static
+    # config:
+    #   domain: ""
+    #   port: 8323
+  tls_verifier:
+    type: cn  # cn, dns, spiffe
+    # config:
+    #   domain: "localhost"
