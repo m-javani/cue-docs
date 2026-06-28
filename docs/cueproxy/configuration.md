@@ -52,3 +52,20 @@ cluster:
       # For spiffe verifier:
       # trust_domain: "example.org"
       # namespace: "default"  # optional
+```
+
+### Address Resolver Types
+
+| Type | Description | Config |
+|------|-------------|--------|
+| `static` | Fixed list of node addresses | `peers: {node1: "192.168.1.10:8322"}` |
+| `dns` | DNS SRV record resolution | `domain: "cue-cluster.local"` |
+| `service` | Service discovery (Consul/Nomad) | TBD |
+
+### TLS Verifier Types
+
+| Type | Description | Config |
+|------|-------------|--------|
+| `cn` | Verify Common Name | None |
+| `dns` | Verify DNS name | `domain: "cluster.local"` |
+| `spiffe` | SPIFFE ID verification | `trust_domain: "example.org"` |
