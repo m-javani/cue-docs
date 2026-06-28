@@ -3,9 +3,6 @@
 ### Full Configuration Reference
 
 ```yaml
-# Auto-generated if empty
-proxy_id: "proxy-001"
-
 api:
   host: "0.0.0.0"
   port: 8080
