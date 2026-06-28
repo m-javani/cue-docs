@@ -853,19 +853,30 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#auto-generated-if-empty" class="md-nav__link">
+          <li class="md-nav__item">
+  <a href="#address-resolver-types" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Auto-generated if empty
+        Address Resolver Types
       
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tls-verifier-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TLS Verifier Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1043,13 +1054,15 @@
   
 
 
+  <h1>Configuration</h1>
+
 <h2 id="configuration">Configuration</h2>
 <h3 id="full-configuration-reference">Full Configuration Reference</h3>
-<p>```yaml</p>
-<h1 id="auto-generated-if-empty">Auto-generated if empty</h1>
-<p>proxy_id: "proxy-001"</p>
-<p>api:
-  host: "0.0.0.0"
+<pre><code class="language-yaml"># Auto-generated if empty
+proxy_id: &quot;proxy-001&quot;
+
+api:
+  host: &quot;0.0.0.0&quot;
   port: 8080
   read_timeout_sec: 45
   write_timeout_sec: 0
@@ -1058,41 +1071,97 @@
   ws_write_timeout_sec: 30
   ws_read_limit_bytes: 32768 # 32KB
   default_max_inflights: 10
-  auth_path: "config/auth.yml"
+  auth_path: &quot;config/auth.yml&quot;
   # TLS settings for API (HTTP/WebSocket)
   tls_enabled: false  # Set to true to enable HTTPS
-  cert_path: "certs/api-cert.pem"
-  key_path: "certs/api-key.pem"
-  ca_path: "certs/api-ca.pem"</p>
-<p>cluster:
-  quic_addr: "0.0.0.0"
+  cert_path: &quot;certs/api-cert.pem&quot;
+  key_path: &quot;certs/api-key.pem&quot;
+  ca_path: &quot;certs/api-ca.pem&quot;
+
+cluster:
+  quic_addr: &quot;0.0.0.0&quot;
   quic_port: 8322
   cluster_seeds:
     - cue-node-1:8322
     - cue-node-2:8322
     - cue-node-3:8322
   # TLS settings for Cluster (QUIC)
-  cert_path: "certs/cluster-cert.pem"
-  key_path: "certs/cluster-key.pem"
-  ca_path: "certs/cluster-ca.pem"
+  cert_path: &quot;certs/cluster-cert.pem&quot;
+  key_path: &quot;certs/cluster-key.pem&quot;
+  ca_path: &quot;certs/cluster-ca.pem&quot;
   address_resolver:
     type: static  # static, dns, service
     config:
       port: 8322
       # For static resolver:
       # peers:
-      #   cue-node-1: "192.168.1.10:8322"
-      #   cue-node-2: "192.168.1.11:8322"
+      #   cue-node-1: &quot;192.168.1.10:8322&quot;
+      #   cue-node-2: &quot;192.168.1.11:8322&quot;
       # For dns resolver:
-      # domain: "cue-cluster.local"
+      # domain: &quot;cue-cluster.local&quot;
   tls_verifier:
     type: cn  # cn, dns, spiffe
     config:
       # For dns verifier:
-      # domain: "cluster.local"
+      # domain: &quot;cluster.local&quot;
       # For spiffe verifier:
-      # trust_domain: "example.org"
-      # namespace: "default"  # optional</p>
+      # trust_domain: &quot;example.org&quot;
+      # namespace: &quot;default&quot;  # optional
+</code></pre>
+<h3 id="address-resolver-types">Address Resolver Types</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Config</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>Fixed list of node addresses</td>
+<td><code>peers: {node1: "192.168.1.10:8322"}</code></td>
+</tr>
+<tr>
+<td><code>dns</code></td>
+<td>DNS SRV record resolution</td>
+<td><code>domain: "cue-cluster.local"</code></td>
+</tr>
+<tr>
+<td><code>service</code></td>
+<td>Service discovery (Consul/Nomad)</td>
+<td>TBD</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tls-verifier-types">TLS Verifier Types</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Config</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cn</code></td>
+<td>Verify Common Name</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>dns</code></td>
+<td>Verify DNS name</td>
+<td><code>domain: "cluster.local"</code></td>
+</tr>
+<tr>
+<td><code>spiffe</code></td>
+<td>SPIFFE ID verification</td>
+<td><code>trust_domain: "example.org"</code></td>
+</tr>
+</tbody>
+</table>
 
 
 
