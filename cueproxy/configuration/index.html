@@ -853,30 +853,19 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#address-resolver-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Address Resolver Types
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tls-verifier-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TLS Verifier Types
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-generated-if-empty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-generated if empty
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1054,112 +1043,56 @@
   
 
 
-  <h1>Configuration</h1>
-
 <h2 id="configuration">Configuration</h2>
 <h3 id="full-configuration-reference">Full Configuration Reference</h3>
-<pre><code class="language-yaml"># Auto-generated if empty
-proxy_id: &quot;proxy-001&quot;
-
-api:
-  host: &quot;0.0.0.0&quot;
+<p>```yaml</p>
+<h1 id="auto-generated-if-empty">Auto-generated if empty</h1>
+<p>proxy_id: "proxy-001"</p>
+<p>api:
+  host: "0.0.0.0"
   port: 8080
-  websocket_read_buffer_size: 1024
-  websocket_write_buffer_size: 1024
-  read_timeout: &quot;30s&quot;
-  write_timeout: &quot;30s&quot;
-  idle_timeout: &quot;120s&quot;
-  score_update_interval: &quot;300ms&quot;
+  read_timeout_sec: 45
+  write_timeout_sec: 0
+  idle_timeout_sec: 300
+  ws_read_timeout_sec: 0
+  ws_write_timeout_sec: 30
+  ws_read_limit_bytes: 32768 # 32KB
   default_max_inflights: 10
-  producer_req_buffer_size: 1000
-  consumer_buffer_size: 1000
-  max_jobs_per_topic: 10000
-
-cluster:
-  quic_addr: &quot;0.0.0.0&quot;
+  auth_path: "config/auth.yml"
+  # TLS settings for API (HTTP/WebSocket)
+  tls_enabled: false  # Set to true to enable HTTPS
+  cert_path: "certs/api-cert.pem"
+  key_path: "certs/api-key.pem"
+  ca_path: "certs/api-ca.pem"</p>
+<p>cluster:
+  quic_addr: "0.0.0.0"
   quic_port: 8322
   cluster_seeds:
     - cue-node-1:8322
     - cue-node-2:8322
     - cue-node-3:8322
-  heartbeat_interval: &quot;1s&quot;
-  request_timeout: &quot;30s&quot;
-  reconnect_delay: &quot;5s&quot;
-  max_message_size: 1048576
-
-auth:
-  file: &quot;config/auth.yml&quot;
-  reload_interval: &quot;30s&quot;
-
-tls:
-  cert_path: &quot;certs/cert.pem&quot;
-  key_path: &quot;certs/key.pem&quot;
-  ca_path: &quot;certs/ca.pem&quot;
-
-address_resolver:
-  type: static  # static, dns, service
-  config:
-    port: 8322
-
-tls_verifier:
-  type: cn  # cn, dns, spiffe
-  config:
-    domain: &quot;cluster.local&quot;
-</code></pre>
-<h3 id="address-resolver-types">Address Resolver Types</h3>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-<th>Config</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>static</code></td>
-<td>Fixed list of node addresses</td>
-<td><code>peers: {node1: "192.168.1.10:8322"}</code></td>
-</tr>
-<tr>
-<td><code>dns</code></td>
-<td>DNS SRV record resolution</td>
-<td><code>domain: "cue-cluster.local"</code></td>
-</tr>
-<tr>
-<td><code>service</code></td>
-<td>Service discovery (Consul/Nomad)</td>
-<td>TBD</td>
-</tr>
-</tbody>
-</table>
-<h3 id="tls-verifier-types">TLS Verifier Types</h3>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-<th>Config</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>cn</code></td>
-<td>Verify Common Name</td>
-<td>None</td>
-</tr>
-<tr>
-<td><code>dns</code></td>
-<td>Verify DNS name</td>
-<td><code>domain: "cluster.local"</code></td>
-</tr>
-<tr>
-<td><code>spiffe</code></td>
-<td>SPIFFE ID verification</td>
-<td><code>trust_domain: "example.org"</code></td>
-</tr>
-</tbody>
-</table>
+  # TLS settings for Cluster (QUIC)
+  cert_path: "certs/cluster-cert.pem"
+  key_path: "certs/cluster-key.pem"
+  ca_path: "certs/cluster-ca.pem"
+  address_resolver:
+    type: static  # static, dns, service
+    config:
+      port: 8322
+      # For static resolver:
+      # peers:
+      #   cue-node-1: "192.168.1.10:8322"
+      #   cue-node-2: "192.168.1.11:8322"
+      # For dns resolver:
+      # domain: "cue-cluster.local"
+  tls_verifier:
+    type: cn  # cn, dns, spiffe
+    config:
+      # For dns verifier:
+      # domain: "cluster.local"
+      # For spiffe verifier:
+      # trust_domain: "example.org"
+      # namespace: "default"  # optional</p>
 
 
 
