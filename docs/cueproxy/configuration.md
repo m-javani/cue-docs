@@ -9,9 +9,12 @@ proxy_id: "proxy-001"
 api:
   host: "0.0.0.0"
   port: 8080
-  read_timeout: "30s"
-  write_timeout: "30s"
-  idle_timeout: "120s"
+  read_timeout_sec: 45
+  write_timeout_sec: 0
+  idle_timeout_sec: 300
+  ws_read_timeout_sec: 0
+  ws_write_timeout_sec: 30
+  ws_read_limit_bytes: 32768 # 32KB
   default_max_inflights: 10
   auth_path: "config/auth.yml"
   # TLS settings for API (HTTP/WebSocket)

@@ -13,18 +13,32 @@
 # limitations under the License.
 
 
+
+node_id: node1
+data_dir: ./data
+
 cluster:
   listen_addr: "0.0.0.0"
+  quic_port: 8323
+  cert_path: "./certs/node1.pem"
+  key_path: "./certs/node1_key.pem"
+  ca_path: "./certs/ca_cert.pem"
+  initial_voters: ["node1","node2","node3"]
+  peers: ["node1","node2","node3"]
   snapshot_interval_sec: 60
   snapshot_trigger_count: 10000
   wal_flush_threshold: 1000
   dlq_max_size_bytes: 10485760  # 10MB
   raft_tick_ms: 100 # 100ms
-  raft_heartbeat_tick: 5 # with 100ms tick = 500ms
-  raft_election_tick: 50 # with 100ms tick = 5 seconds
+  raft_heartbeat_tick: 3 # with 100ms tick = 300ms
+  raft_election_tick: 30 # with 100ms tick = 3 seconds
 
 proxy:
   addr: "0.0.0.0"
+  port: 8322
+  cert_path: "./certs/node1.pem"
+  key_path: "./certs/node1_key.pem"
+  ca_path: "./certs/ca_cert.pem"
 
 wal:
   compact_after_bytes: 104857600  # 100MB
@@ -36,7 +50,7 @@ logging:
   output_path: "stdout"  # stdout, stderr, or file path
 
 partition:
-  active_queue_capacity: 10000
+  active_queue_capacity: 1000000
   retry_base_delay_ms: 1000
   max_retries: 3
   max_backoff_ms: 2000
@@ -47,12 +61,13 @@ partition:
 api:
   listen_addr: "0.0.0.0"
   api_port: 8321
+  token_path: "./configs/auth.yml"
 
 address_resolver:
-  type: service # dns, static
-  # config:
-    # domain: ""
-    # port: 8323
+  type: service # dns, static, service
+  #config:
+    #domain: ""
+    #port: 8323
 
 tls_verifier:
   type: cn # cn, dns, spiffe
