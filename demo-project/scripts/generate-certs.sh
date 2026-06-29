@@ -7,15 +7,11 @@ NODES=("node1" "node2" "node3")
 PROXIES=("proxy1")
 # ===========================================
 
-# Check if certs already exist
-if [ -f "$CERTS_DIR/ca_cert.pem" ] && [ -f "$CERTS_DIR/node1/cert.pem" ]; then
-    echo "✅ Certificates already exist in $CERTS_DIR"
-    exit 0
-fi
-
-mkdir -p "$CERTS_DIR"
-
 echo "=== Generating TLS certificates ==="
+
+# Always clean and regenerate
+rm -rf "$CERTS_DIR"
+mkdir -p "$CERTS_DIR"
 
 # === Generate CA ===
 echo "Generating CA..."
@@ -86,10 +82,54 @@ for node in "${NODES[@]}"; do
     generate_leaf_cert "$node"
 done
 
-# Generate certs for all proxies
-echo "Generating proxy certificates..."
+# Generate certs for all proxies (cluster communication)
+echo "Generating proxy cluster certificates..."
 for proxy in "${PROXIES[@]}"; do
     generate_leaf_cert "$proxy"
+done
+
+# Generate API certificate for proxy (public-facing) - IN SAME DIRECTORY
+echo "Generating proxy API certificate..."
+for proxy in "${PROXIES[@]}"; do
+    cert_dir="$CERTS_DIR/$proxy"
+    
+    cat > "$cert_dir/api.csr.conf" << EOF
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+req_extensions = req_ext
+distinguished_name = dn
+
+[dn]
+CN = proxy-api
+
+[req_ext]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+DNS.2 = api.localhost
+DNS.3 = ${proxy}
+DNS.4 = ${proxy}.localhost
+EOF
+
+    openssl req -newkey rsa:2048 -nodes \
+        -keyout "$cert_dir/api-key.pem" \
+        -out "$cert_dir/api.csr" \
+        -config "$cert_dir/api.csr.conf" \
+        -subj "/CN=proxy-api" > /dev/null 2>&1
+
+    openssl x509 -req -in "$cert_dir/api.csr" \
+        -CA "$CERTS_DIR/ca_cert.pem" \
+        -CAkey "$CERTS_DIR/ca_key.pem" \
+        -CAcreateserial \
+        -out "$cert_dir/api-cert.pem" -days 3650 -sha256 \
+        -extfile "$cert_dir/api.csr.conf" \
+        -extensions req_ext > /dev/null 2>&1
+
+    rm -f "$cert_dir/api.csr" "$cert_dir/api.csr.conf"
+    echo "  ✅ API certificate for $proxy"
 done
 
 # Cleanup serial files
@@ -103,15 +143,19 @@ echo "Generated:"
 echo "  CA:"
 echo "    - $CERTS_DIR/ca_cert.pem"
 echo "    - $CERTS_DIR/ca_key.pem"
-echo "  Nodes:"
+echo ""
+echo "  Nodes (cluster communication):"
 for node in "${NODES[@]}"; do
     echo "    - $CERTS_DIR/$node/cert.pem"
     echo "    - $CERTS_DIR/$node/key.pem"
 done
-echo "  Proxies:"
+echo ""
+echo "  Proxy (both cluster + API certs):"
 for proxy in "${PROXIES[@]}"; do
-    echo "    - $CERTS_DIR/$proxy/cert.pem"
-    echo "    - $CERTS_DIR/$proxy/key.pem"
+    echo "    - $CERTS_DIR/$proxy/cert.pem (cluster)"
+    echo "    - $CERTS_DIR/$proxy/key.pem (cluster)"
+    echo "    - $CERTS_DIR/$proxy/api-cert.pem (API)"
+    echo "    - $CERTS_DIR/$proxy/api-key.pem (API)"
 done
 echo ""
 echo "💡 All certificates are signed by the same CA"

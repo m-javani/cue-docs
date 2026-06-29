@@ -34,29 +34,32 @@ sudo dnf install websocat
 
 ---
 
-## start all
+## Start the Demo
+
+Everything is automated with a single command:
 
 ```bash
-make all
+make start
 ```
 
 This single command:
-- Clones the source repositories
-- Builds the binaries
-- Builds Docker images
-- Generates TLS certificates
+- Pulls `mehdyjavany/cue:latest` and `mehdyjavany/cue-proxy:latest` from Docker Hub
+- Generates fresh TLS certificates
+- Cleans old data
 - Starts the cluster and proxy
 
 **Expected output:**
 ```
-✅ All services started!
+✅ Cue Demo is ready!
 API: http://localhost:8080
-Health: curl http://localhost:8080/health
+Health: make health
+Logs: make logs
+Stop: make stop
 ```
 
 ---
 
-## verify
+## Verify
 
 ```bash
 make health
@@ -64,6 +67,7 @@ make health
 
 **Expected output:**
 ```
+✅ Proxy healthy
 ✅ node1 healthy
 ✅ node2 healthy
 ✅ node3 healthy
@@ -76,7 +80,7 @@ make health
 You'll need **two terminals** for this demo.
 
 ### Step 1: Terminal 1
-- Create a Topic (http)
+- Create a Topic
 
 ```bash
 make topic name=orders
@@ -84,12 +88,11 @@ make topic name=orders
 
 **Expected output:**
 ```
-Creating topic: orders
 {"status":"success"}
 ```
 
 ### Step 2: Terminal 1
-- Subscribe as Consumer (websocket)
+- Subscribe as Consumer (WebSocket)
 
 ```bash
 make subscribe topic=orders
@@ -99,12 +102,11 @@ This opens a WebSocket connection and waits for jobs.
 
 **Expected output:**
 ```
-Connecting to topic: orders (UUID: consumer-yourname)
 {"action":"accepted","topic":"","jobId":"","seqId":0,"data":null}
 ```
 
 ### Step 3: Terminal 2
- - Add Jobs (http)
+- Add Jobs
 
 ```bash
 make job topic=orders payload='{"order_id": 1, "amount": 99.99}'
@@ -114,7 +116,6 @@ make job topic=orders payload='{"order_id": 3, "amount": 150.00}'
 
 **Expected output:**
 ```
-Adding job to topic: orders (ID: job-1782218880-1598043)
 {"job_id":"job-1782218880-1598043","status":"success"}
 ```
 
@@ -137,21 +138,25 @@ In Terminal 1, you'll see jobs arriving in real-time:
 make stop
 ```
 
+This stops all containers and cleans up data.
+
 ---
 
 ## Makefile Commands
 
 | Command | Description |
 |---------|-------------|
-| `make all` | Clone repos, build binaries, generate certs, and start everything |
-| `make start` | Start services (certs must already exist) |
-| `make stop` | Stop all services |
+| **Control** | |
+| `make start` | Pull images, generate certs, start everything with fresh data |
+| `make stop` | Stop all services and cleanup data |
+| `make restart` | Stop and start fresh |
+| `make logs` | View live logs |
 | `make health` | Check health of all services |
+| `make clean` | Remove everything (containers, data, certs) |
+| **API** | |
 | `make topic name=<topic>` | Create a new topic |
 | `make job topic=<topic> payload='<json>'` | Add a job to a topic |
 | `make subscribe topic=<topic>` | Subscribe as consumer (WebSocket) |
-| `make logs` | View live logs |
-| `make clean` | Stop and remove everything |
 
 ---
 
@@ -166,3 +171,37 @@ make stop
 | `/ws` | WebSocket | Subscribe as consumer |
 
 ---
+
+## Examples
+
+```bash
+# Start the demo
+make start
+
+# Create a topic
+make topic name=orders
+
+# Add jobs
+make job topic=orders payload='{"product":"book","quantity":1}'
+
+# Subscribe to a topic
+make subscribe topic=orders
+
+# Check health
+make health
+
+# View logs
+make logs
+
+# Stop everything
+make stop
+```
+
+---
+
+## Notes
+
+- Certificates and data are automatically cleaned on every `make start`
+- No local build required - everything is pulled from Docker Hub
+- All services are configured for HTTP (no TLS for API simplicity)
+- Cluster communication uses TLS certificates generated automatically

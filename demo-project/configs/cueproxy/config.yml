@@ -24,8 +24,8 @@ api:
   default_max_inflights: 10
   auth_path: "./auth.yml"
   tls_enabled: false  # Set to true to enable HTTPS for API
-  cert_path: "certs/api-cert.pem"
-  key_path: "certs/api-key.pem"
+  # cert_path: "certs/api-cert.pem"
+  # key_path: "certs/api-key.pem"
 
 cluster:
   quic_addr: "0.0.0.0"
