@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#quick-start" class="md-skip">
+        <a href="#cue-quick-start" class="md-skip">
           Skip to content
         </a>
       
@@ -951,10 +951,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#download" class="md-nav__link">
+  <a href="#1-start-the-demo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Download
+        1. Start the Demo
       
     </span>
   </a>
@@ -962,22 +962,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+  <a href="#2-try-it-out" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prerequisites
+        2. Try It Out
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Prerequisites">
+    <nav class="md-nav" aria-label="2. Try It Out">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#docker-compose" class="md-nav__link">
+  <a href="#terminal-1-create-topic-consumer" class="md-nav__link">
     <span class="md-ellipsis">
       
-        docker &amp; compose
+        Terminal 1 — Create Topic + Consumer
       
     </span>
   </a>
@@ -985,10 +985,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#websocat" class="md-nav__link">
+  <a href="#terminal-2-send-jobs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        websocat
+        Terminal 2 — Send Jobs
       
     </span>
   </a>
@@ -1001,10 +1001,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#start-the-demo" class="md-nav__link">
+  <a href="#3-stop-the-ccluster-and-proxy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Start the Demo
+        3. Stop the ccluster and proxy
       
     </span>
   </a>
@@ -1012,126 +1012,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#useful-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#try-it-out" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Try It Out
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Try It Out">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-terminal-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1: Terminal 1
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-terminal-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2: Terminal 1
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-terminal-2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Terminal 2
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#watch-the-consumer" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Watch the Consumer
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stop-all" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Stop All
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#makefile-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Makefile Commands
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#api-endpoints" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API Endpoints
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Examples
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Notes
+        Useful Commands
       
     </span>
   </a>
@@ -1193,230 +1077,53 @@
   
 
 
-<h1 id="quick-start">Quick Start</h1>
-<p>The fastest way to try Cue is with the <strong>pre-packaged demo environment</strong>.</p>
-<h2 id="download">Download</h2>
-<p><a href="../assets/demo/demo.zip">Download the demo zip here</a></p>
-<pre><code class="language-bash">cd demo
-</code></pre>
-<h2 id="prerequisites">Prerequisites</h2>
-<h3 id="docker-compose">docker &amp; compose</h3>
+<h1 id="cue-quick-start">Cue Quick Start</h1>
+<p><strong>Prerequisites</strong></p>
 <ul>
-<li>You need <code>docker</code> and <code>docker compose</code> installed on your machine</li>
+<li>Docker and Docker Compose installed</li>
+<li>Python 3 installed</li>
+<li>Install WebSocket library (one time):
+  <code>bash
+  pip3 install websockets</code></li>
 </ul>
-<h3 id="websocat">websocat</h3>
-<ul>
-<li>for consumer to open a WebSocket connection in terminal</li>
-</ul>
-<pre><code class="language-bash"># macOS
-brew install websocat
-
-# Linux (Ubuntu/Debian) - download binary
-wget https://github.com/vi/websocat/releases/latest/download/websocat.x86_64-unknown-linux-musl -O websocat
-chmod +x websocat
-sudo mv websocat /usr/local/bin/
-
-# Linux (Fedora/RHEL)
-sudo dnf copr enable atim/websocat -y
-sudo dnf install websocat
-</code></pre>
 <hr />
-<h2 id="start-the-demo">Start the Demo</h2>
-<p>Everything is automated with a single command:</p>
+<h2 id="1-start-the-demo">1. Start the Demo</h2>
 <pre><code class="language-bash">make start
 </code></pre>
-<p>This single command:
-- Pulls <code>mehdyjavany/cue:latest</code> and <code>mehdyjavany/cue-proxy:latest</code> from Docker Hub
-- Generates fresh TLS certificates
-- Cleans old data
-- Starts the cluster and proxy</p>
-<p><strong>Expected output:</strong></p>
-<pre><code>✅ Cue Demo is ready!
-API: http://localhost:8080
-Health: make health
-Logs: make logs
-Stop: make stop
-</code></pre>
 <hr />
-<h2 id="verify">Verify</h2>
-<pre><code class="language-bash">make health
-</code></pre>
-<p><strong>Expected output:</strong></p>
-<pre><code>✅ Proxy healthy
-✅ node1 healthy
-✅ node2 healthy
-✅ node3 healthy
-</code></pre>
-<hr />
-<h2 id="try-it-out">Try It Out</h2>
-<p>You'll need <strong>two terminals</strong> for this demo.</p>
-<h3 id="step-1-terminal-1">Step 1: Terminal 1</h3>
-<ul>
-<li>Create a Topic</li>
-</ul>
-<pre><code class="language-bash">make topic name=orders
-</code></pre>
-<p><strong>Expected output:</strong></p>
-<pre><code>{&quot;status&quot;:&quot;success&quot;}
-</code></pre>
-<h3 id="step-2-terminal-1">Step 2: Terminal 1</h3>
-<ul>
-<li>Subscribe as Consumer (WebSocket)</li>
-</ul>
-<pre><code class="language-bash">make subscribe topic=orders
-</code></pre>
-<p>This opens a WebSocket connection and waits for jobs.</p>
-<p><strong>Expected output:</strong></p>
-<pre><code>{&quot;action&quot;:&quot;accepted&quot;,&quot;topic&quot;:&quot;&quot;,&quot;jobId&quot;:&quot;&quot;,&quot;seqId&quot;:0,&quot;data&quot;:null}
-</code></pre>
-<h3 id="step-3-terminal-2">Step 3: Terminal 2</h3>
-<ul>
-<li>Add Jobs</li>
-</ul>
-<pre><code class="language-bash">make job topic=orders payload='{&quot;order_id&quot;: 1, &quot;amount&quot;: 99.99}'
-make job topic=orders payload='{&quot;order_id&quot;: 2, &quot;amount&quot;: 49.50}'
-make job topic=orders payload='{&quot;order_id&quot;: 3, &quot;amount&quot;: 150.00}'
-</code></pre>
-<p><strong>Expected output:</strong></p>
-<pre><code>{&quot;job_id&quot;:&quot;job-1782218880-1598043&quot;,&quot;status&quot;:&quot;success&quot;}
-</code></pre>
-<h3 id="watch-the-consumer">Watch the Consumer</h3>
-<p>In Terminal 1, you'll see jobs arriving in real-time:</p>
-<pre><code class="language-json">{&quot;action&quot;:&quot;accepted&quot;,&quot;topic&quot;:&quot;&quot;,&quot;jobId&quot;:&quot;&quot;,&quot;seqId&quot;:0,&quot;data&quot;:null}
-{&quot;action&quot;:&quot;job&quot;,&quot;topic&quot;:&quot;orders&quot;,&quot;jobId&quot;:&quot;job-1782218880-1598043&quot;,&quot;seqId&quot;:1,&quot;data&quot;:{&quot;order_id&quot;:1,&quot;amount&quot;:99.99}}
-{&quot;action&quot;:&quot;job&quot;,&quot;topic&quot;:&quot;orders&quot;,&quot;jobId&quot;:&quot;job-1782218892-1598362&quot;,&quot;seqId&quot;:2,&quot;data&quot;:{&quot;order_id&quot;:2,&quot;amount&quot;:49.50}}
-{&quot;action&quot;:&quot;job&quot;,&quot;topic&quot;:&quot;orders&quot;,&quot;jobId&quot;:&quot;job-1782218898-1598558&quot;,&quot;seqId&quot;:3,&quot;data&quot;:{&quot;order_id&quot;:3,&quot;amount&quot;:150.00}}
-</code></pre>
-<hr />
-<h2 id="stop-all">Stop All</h2>
-<pre><code class="language-bash">make stop
-</code></pre>
-<p>This stops all containers and cleans up data.</p>
-<hr />
-<h2 id="makefile-commands">Makefile Commands</h2>
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Control</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><code>make start</code></td>
-<td>Pull images, generate certs, start everything with fresh data</td>
-</tr>
-<tr>
-<td><code>make stop</code></td>
-<td>Stop all services and cleanup data</td>
-</tr>
-<tr>
-<td><code>make restart</code></td>
-<td>Stop and start fresh</td>
-</tr>
-<tr>
-<td><code>make logs</code></td>
-<td>View live logs</td>
-</tr>
-<tr>
-<td><code>make health</code></td>
-<td>Check health of all services</td>
-</tr>
-<tr>
-<td><code>make clean</code></td>
-<td>Remove everything (containers, data, certs)</td>
-</tr>
-<tr>
-<td><strong>API</strong></td>
-<td></td>
-</tr>
-<tr>
-<td><code>make topic name=&lt;topic&gt;</code></td>
-<td>Create a new topic</td>
-</tr>
-<tr>
-<td><code>make job topic=&lt;topic&gt; payload='&lt;json&gt;'</code></td>
-<td>Add a job to a topic</td>
-</tr>
-<tr>
-<td><code>make subscribe topic=&lt;topic&gt;</code></td>
-<td>Subscribe as consumer (WebSocket)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="api-endpoints">API Endpoints</h2>
-<table>
-<thead>
-<tr>
-<th>Endpoint</th>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>/health</code></td>
-<td>GET</td>
-<td>Health check</td>
-</tr>
-<tr>
-<td><code>/metrics</code></td>
-<td>GET</td>
-<td>Prometheus metrics</td>
-</tr>
-<tr>
-<td><code>/producer/topic</code></td>
-<td>POST</td>
-<td>Create a topic</td>
-</tr>
-<tr>
-<td><code>/producer/job</code></td>
-<td>POST</td>
-<td>Add a job</td>
-</tr>
-<tr>
-<td><code>/ws</code></td>
-<td>WebSocket</td>
-<td>Subscribe as consumer</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="examples">Examples</h2>
-<pre><code class="language-bash"># Start the demo
-make start
-
-# Create a topic
+<h2 id="2-try-it-out">2. Try It Out</h2>
+<p>Open <strong>two terminals</strong>:</p>
+<h3 id="terminal-1-create-topic-consumer">Terminal 1 — Create Topic + Consumer</h3>
+<pre><code class="language-bash"># Create topic first
 make topic name=orders
 
-# Add jobs
-make job topic=orders payload='{&quot;product&quot;:&quot;book&quot;,&quot;quantity&quot;:1}'
-
-# Subscribe to a topic
-make subscribe topic=orders
-
-# Check health
-make health
-
-# View logs
-make logs
-
-# Stop everything
-make stop
+# Then start consumer
+make consumer topic=orders
+</code></pre>
+<blockquote>
+<p><strong>Important:</strong> Create the topic and start the consumer <strong>before</strong> sending jobs. Otherwise, jobs may be retried or dropped.</p>
+</blockquote>
+<h3 id="terminal-2-send-jobs">Terminal 2 — Send Jobs</h3>
+<pre><code class="language-bash">make job topic=orders payload='{&quot;order_id&quot;: 1, &quot;amount&quot;: 99.99}'
+make job topic=orders payload='{&quot;order_id&quot;: 2, &quot;amount&quot;: 49.50}'
+</code></pre>
+<p>You will see the jobs arriving in real-time in Terminal 1.</p>
+<hr />
+<h2 id="3-stop-the-ccluster-and-proxy">3. Stop the ccluster and proxy</h2>
+<pre><code class="language-bash">make stop
 </code></pre>
 <hr />
-<h2 id="notes">Notes</h2>
-<ul>
-<li>Certificates and data are automatically cleaned on every <code>make start</code></li>
-<li>No local build required - everything is pulled from Docker Hub</li>
-<li>All services are configured for HTTP (no TLS for API simplicity)</li>
-<li>Cluster communication uses TLS certificates generated automatically</li>
-</ul>
+<h2 id="useful-commands">Useful Commands</h2>
+<pre><code class="language-bash">make start      # Start fresh demo
+make stop       # Stop everything
+make logs       # View logs
+make health     # Check status
+
+make topic name=xxx
+make consumer topic=xxx
+make job topic=xxx payload='{...}'
+</code></pre>
+<p><strong>Note:</strong> Always create the topic <strong>before</strong> starting the consumer.</p>
 
 
 
