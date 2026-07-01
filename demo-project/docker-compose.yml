@@ -1,11 +1,13 @@
 services:
   node1:
-    image: cue-demo:latest
+    image: mehdyjavany/cue:latest
     container_name: node1
     hostname: node1
     networks:
       cue-net:
         ipv4_address: 172.21.0.10
+    ports:
+      - "9321:8321"
     volumes:
       - ./certs:/certs:ro
       - ./configs/cue:/opt/cue/configs:ro
@@ -17,12 +19,14 @@ services:
       - NET_ADMIN
 
   node2:
-    image: cue-demo:latest
+    image: mehdyjavany/cue:latest
     container_name: node2
     hostname: node2
     networks:
       cue-net:
         ipv4_address: 172.21.0.11
+    ports:
+      - "9322:8321"
     volumes:
       - ./certs:/certs:ro
       - ./configs/cue:/opt/cue/configs:ro
@@ -34,12 +38,14 @@ services:
       - NET_ADMIN
 
   node3:
-    image: cue-demo:latest
+    image: mehdyjavany/cue:latest
     container_name: node3
     hostname: node3
     networks:
       cue-net:
         ipv4_address: 172.21.0.12
+    ports:
+      - "9323:8321"
     volumes:
       - ./certs:/certs:ro
       - ./configs/cue:/opt/cue/configs:ro
@@ -51,7 +57,7 @@ services:
       - NET_ADMIN
 
   proxy1:
-    image: cueproxy-demo:latest
+    image: mehdyjavany/cue-proxy:latest
     container_name: proxy1
     hostname: proxy1
     networks:

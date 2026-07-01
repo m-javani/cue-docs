@@ -21,7 +21,7 @@ api:
   ws_read_timeout_sec: 0
   ws_write_timeout_sec: 30
   ws_read_limit_bytes: 32768 # 32KB
-  default_max_inflights: 10
+  default_max_inflights: 10000
   auth_path: "./auth.yml"
   tls_enabled: false  # Set to true to enable HTTPS for API
   # cert_path: "certs/api-cert.pem"
