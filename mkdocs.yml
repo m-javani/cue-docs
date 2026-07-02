@@ -64,6 +64,7 @@ nav:
     - Deployment: cueproxy/deployment.md
     - Monitoring: cueproxy/monitoring.md
   - Quick-Start: quickstart.md
+  - Benchmark: benchmark.md
   - Contributing: contributing.md
   
 # Add these new sections for better visual design

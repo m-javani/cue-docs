@@ -41,5 +41,6 @@ Cue is simple to operate, bounded by design, and honest about its limits. Teams 
 - [Quick Start](./quickstart.md)
 - [Cue GitHub](https://github.com/m-javani/cue)
 - [CueProxy GitHub](https://github.com/m-javani/cue-proxy)
+- [Benchmarking](benchmark.md) - Test system performance
 
 ---
