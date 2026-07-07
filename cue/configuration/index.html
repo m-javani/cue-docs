@@ -16,7 +16,7 @@
         <link rel="prev" href="../overview/">
       
       
-        <link rel="next" href="../cluster-management/">
+        <link rel="next" href="../discovery/">
       
       
         
@@ -440,6 +440,8 @@
       
         
       
+        
+      
     
     
     
@@ -594,21 +596,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#address-resolver-types" class="md-nav__link">
+  <a href="#discovery-configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Address Resolver Types
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tls-verifier-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TLS Verifier Types
+        Discovery Configuration
       
     </span>
   </a>
@@ -619,6 +610,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../discovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1101,14 +1120,19 @@ cluster:
   key_path: &quot;./certs/node1_key.pem&quot;   # TLS private key
   ca_path: &quot;./certs/ca_cert.pem&quot;      # CA certificate for mTLS
   initial_voters: [&quot;node1&quot;,&quot;node2&quot;,&quot;node3&quot;]  # Initial Raft voters
-  peers: [&quot;node1&quot;,&quot;node2&quot;,&quot;node3&quot;]    # Peer nodes for discovery
   snapshot_interval_sec: 60           # Snapshot interval in seconds
   snapshot_trigger_count: 10000       # Snapshot trigger entry count
   wal_flush_threshold: 1000           # WAL flush threshold
   dlq_max_size_bytes: 10485760        # Max DLQ size (10MB)
   raft_tick_ms: 100                   # Raft tick interval (100ms)
-  raft_heartbeat_tick: 5              # Heartbeat tick multiplier (500ms)
-  raft_election_tick: 50              # Election tick multiplier (5s)
+  raft_heartbeat_tick: 3              # Heartbeat tick multiplier (300ms)
+  raft_election_tick: 30              # Election tick multiplier (3s)
+
+  # Discovery configuration
+  discovery_kind: &quot;static&quot;            # &quot;static&quot; or &quot;http&quot;
+  discovery_yml_path: &quot;./discovery.yml&quot;  # Required for static discovery
+  discovery_http_host: &quot;&quot;             # HTTP endpoint URL (required for http discovery)
+                                      # Example: &quot;http://discovery-service:8080&quot;
 
 # Proxy (external CueProxy communication)
 proxy:
@@ -1133,9 +1157,8 @@ wal:
 # Partition settings
 partition:
   active_queue_capacity: 1000000      # Max jobs per partition
-  retry_base_delay_ms: 1000           # Initial retry delay (1s)
   max_retries: 3                      # Max retry attempts
-  max_backoff_ms: 60000               # Max backoff (60s)
+  max_backoff_sec: 2                  # Maximum backoff in seconds
   dispatch_batch_size: 128            # Batch size for dispatch
   dlq_max_bytes: 10485760             # DLQ max size (10MB)
   dlq_max_age_ms: 86400000            # DLQ max age (24 hours)
@@ -1145,79 +1168,22 @@ logging:
   level: &quot;info&quot;                       # debug, info, warn, error
   format: &quot;json&quot;                      # json or text
   output_path: &quot;stdout&quot;               # stdout, stderr, or file path
-
-# Service discovery
-address_resolver:
-  type: static                        # static, dns, service
-  config:
-    peers:                            # For static resolver
-      node1: &quot;192.168.1.10:8323&quot;
-      node2: &quot;192.168.1.11:8323&quot;
-      node3: &quot;192.168.1.12:8323&quot;
-    # domain: &quot;cluster.local&quot;         # For DNS resolver
-    # port: 8323
-
-# TLS verification
-tls_verifier:
-  type: cn                            # cn, dns, spiffe
-  # config:
-  #   domain: &quot;cluster.local&quot;         # For DNS verifier
-  #   trust_domain: &quot;example.org&quot;     # For SPIFFE verifier
 </code></pre>
-<h3 id="address-resolver-types">Address Resolver Types</h3>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-<th>Config</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>static</code></td>
-<td>Fixed mapping of node IDs to addresses</td>
-<td><code>peers: {node1: "192.168.1.10:8323"}</code></td>
-</tr>
-<tr>
-<td><code>dns</code></td>
-<td>DNS SRV record resolution</td>
-<td><code>domain: "cue-cluster.local"</code></td>
-</tr>
-<tr>
-<td><code>service</code></td>
-<td>Service discovery (Consul/Nomad)</td>
-<td>None needed</td>
-</tr>
-</tbody>
-</table>
-<h3 id="tls-verifier-types">TLS Verifier Types</h3>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-<th>Config</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>cn</code></td>
-<td>Verify Common Name matches node ID</td>
-<td>None</td>
-</tr>
-<tr>
-<td><code>dns</code></td>
-<td>Verify DNS name</td>
-<td><code>domain: "cluster.local"</code></td>
-</tr>
-<tr>
-<td><code>spiffe</code></td>
-<td>SPIFFE ID verification</td>
-<td><code>trust_domain: "example.org"</code></td>
-</tr>
-</tbody>
-</table>
+<hr />
+<h3 id="discovery-configuration">Discovery Configuration</h3>
+<p>The cluster uses a discovery mechanism to locate peer nodes and verify their identities. The discovery system is pluggable and supports two modes:</p>
+<ul>
+<li><strong>Static Discovery</strong>: Reads peer information from a local YAML file</li>
+<li><strong>HTTP Discovery</strong>: Queries an HTTP endpoint that you implement based on your infrastructure</li>
+</ul>
+<p>The discovery configuration is specified under the <code>cluster</code> section in config yaml file:</p>
+<pre><code class="language-yaml">cluster:
+  discovery_kind: &quot;static&quot;            # or &quot;http&quot;
+  discovery_yml_path: &quot;./discovery.yml&quot;  # For static discovery
+  discovery_http_host: &quot;http://discovery-service:8080&quot;  # For HTTP discovery
+</code></pre>
+<p>For detailed information about the discovery protocol, file format, and HTTP API specification, see the <a href="../discovery/">Discovery</a> page.</p>
+<hr />
 
 
 

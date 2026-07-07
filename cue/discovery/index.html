@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://m-javani.github.io/cue-docs/cueproxy/api/">
+        <link rel="canonical" href="https://m-javani.github.io/cue-docs/cue/discovery/">
       
       
-        <link rel="prev" href="../overview/">
+        <link rel="prev" href="../configuration/">
       
       
-        <link rel="next" href="../configuration/">
+        <link rel="next" href="../cluster-management/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>API Reference - Cue</title>
+        <title>Discovery - Cue</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#api-reference" class="md-skip">
+        <a href="#discovery" class="md-skip">
           Skip to content
         </a>
       
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              API Reference
+              Discovery
             
           </span>
         </div>
@@ -245,11 +245,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../cue/overview/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../overview/" class="md-tabs__link">
           
   
   
@@ -267,13 +269,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../overview/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../cueproxy/overview/" class="md-tabs__link">
           
   
   
@@ -421,285 +421,14 @@
       
   
   
+    
+  
   
   
     
     
       
         
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Cue
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Cue
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cue/overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Overview
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cue/configuration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Configuration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cue/discovery/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Discovery
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cue/cluster-management/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Cluster Management
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cue/monitoring/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Monitoring
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cue/deployment/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deployment
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../cue/limitations/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Limitations
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
       
         
       
@@ -729,17 +458,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    CueProxy
+    Cue
   
 
     
@@ -750,12 +479,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
   
-    CueProxy
+    Cue
   
 
           </label>
@@ -793,103 +522,6 @@
                 
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    API Reference
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    API Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#producer-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Producer API
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#consumer-websocket-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Consumer WebSocket API
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
   
   
     <li class="md-nav__item">
@@ -918,17 +550,181 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../authentication/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discovery
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Authentication
+    Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery Modes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Discovery Modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identity-verification-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity Verification Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring
   
 
     
@@ -977,7 +773,250 @@
   
   
     <li class="md-nav__item">
-      <a href="../monitoring/" class="md-nav__link">
+      <a href="../limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CueProxy
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CueProxy
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cueproxy/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cueproxy/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cueproxy/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cueproxy/authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cueproxy/deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cueproxy/monitoring/" class="md-nav__link">
         
   
   
@@ -1106,28 +1145,150 @@
   
 
 
-<h1 id="api-reference">API Reference</h1>
-<h2 id="producer-api">Producer API</h2>
-<p><strong>Create Topic</strong></p>
-<pre><code class="language-http">POST /producer/topic
-Authorization: Bearer &lt;token&gt;
-{ &quot;topic&quot;: &quot;email-notifications&quot; }
+<h1 id="discovery">Discovery</h1>
+<p>The discovery system provides a pluggable mechanism for nodes to discover peer nodes and verify their TLS identities. This decouples the cluster from specific infrastructure implementations and allows operators to provide discovery information that matches their environment.</p>
+<h2 id="overview">Overview</h2>
+<p>Each node in the cluster needs to know:
+1. The network address (IP:port) of every other peer node
+2. The expected identity (subject alternative name) in each peer's TLS certificate</p>
+<p>The discovery system abstracts this information retrieval, supporting both static configurations and dynamic HTTP-based discovery.</p>
+<h2 id="discovery-modes">Discovery Modes</h2>
+<h3 id="static-discovery">Static Discovery</h3>
+<p>Static discovery reads peer information from a local YAML file. This is suitable for fixed, known cluster topologies where node addresses and identities don't change.</p>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-yaml">cluster:
+  discovery_kind: &quot;static&quot;
+  discovery_yml_path: &quot;./discovery.yml&quot;
 </code></pre>
-<p><strong>Submit Job</strong></p>
-<pre><code class="language-http">POST /producer/job
-Authorization: Bearer &lt;token&gt;
-{
-  &quot;job&quot;: {
-    &quot;id&quot;: &quot;job-123&quot;,
-    &quot;topic&quot;: &quot;email-notifications&quot;,
-    &quot;data&quot;: &quot;base64-encoded-payload&quot;
-  }
+<p><strong>Discovery File Format (<code>discovery.yml</code>):</strong></p>
+<pre><code class="language-yaml">nodes:
+  - node_id: node1
+    ip: 10.0.1.11
+    identity:
+      kind: dns
+      value: node1.localhost
+
+  - node_id: node2
+    ip: 10.0.1.12
+    identity:
+      kind: dns
+      value: node2.localhost
+
+  - node_id: node3
+    ip: 10.0.1.13
+    identity:
+      kind: dns
+      value: node3.localhost
+</code></pre>
+<p><strong>File Fields:</strong>
+- <code>node_id</code>: Unique identifier matching the node's configured <code>node_id</code>
+- <code>ip</code>: IP address or hostname of the node
+- <code>identity</code>: TLS certificate verification information
+  - <code>kind</code>: Type of identity check (<code>dns</code>, <code>ip</code>, or <code>spiffe</code>)
+  - <code>value</code>: The expected value to match against the certificate's SAN</p>
+<h3 id="http-discovery">HTTP Discovery</h3>
+<p>HTTP discovery queries an external HTTP endpoint that you implement. This is ideal for dynamic environments where:
+- Nodes come and go (auto-scaling)
+- IP addresses change frequently (cloud environments)
+- TLS certificates are dynamically issued
+- You want to centralize cluster membership information</p>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-yaml">cluster:
+  discovery_kind: &quot;http&quot;
+  discovery_http_host: &quot;http://discovery-service:8080&quot;
+</code></pre>
+<p><strong>HTTP Request:</strong>
+- <strong>Method</strong>: GET
+- <strong>Path</strong>: <code>/peers</code> (the endpoint is fixed)
+- <strong>Full URL</strong>: <code>{discovery_http_host}/peers</code>
+- <strong>Headers</strong>: None required</p>
+<p><strong>HTTP Response Format:</strong>
+The endpoint must return a JSON response with the following structure:</p>
+<pre><code class="language-json">{
+  &quot;nodes&quot;: [
+    {
+      &quot;node_id&quot;: &quot;node1&quot;,
+      &quot;ip&quot;: &quot;10.0.1.11&quot;,
+      &quot;identity&quot;: {
+        &quot;kind&quot;: &quot;dns&quot;,
+        &quot;value&quot;: &quot;node1.localhost&quot;
+      }
+    },
+    {
+      &quot;node_id&quot;: &quot;node2&quot;,
+      &quot;ip&quot;: &quot;10.0.1.12&quot;,
+      &quot;identity&quot;: {
+        &quot;kind&quot;: &quot;dns&quot;,
+        &quot;value&quot;: &quot;node2.localhost&quot;
+      }
+    },
+    {
+      &quot;node_id&quot;: &quot;node3&quot;,
+      &quot;ip&quot;: &quot;10.0.1.13&quot;,
+      &quot;identity&quot;: {
+        &quot;kind&quot;: &quot;dns&quot;,
+        &quot;value&quot;: &quot;node3.localhost&quot;
+      }
+    }
+  ]
 }
 </code></pre>
-<h2 id="consumer-websocket-api">Consumer WebSocket API</h2>
-<p>Connect to <code>ws://localhost:8080/ws?token=&lt;consumer_token&gt;</code></p>
-<p>See full message reference in the <a href="https://github.com/m-javani/cue-proxy">CueProxy README</a>.</p>
-<hr />
+<p><strong>Response Fields:</strong>
+- <code>nodes</code> (array): List of known nodes in the cluster
+  - <code>node_id</code> (string): Unique node identifier - should match node ids used in cluster
+  - <code>ip</code> (string): IP address or hostname where the node listens for Raft traffic
+  - <code>identity</code> (object): TLS certificate verification information
+    - <code>kind</code> (string): Identity verification type: <code>dns</code>, <code>ip</code>, or <code>spiffe</code>
+    - <code>value</code> (string): Expected value to match against the certificate</p>
+<p><strong>Best Practices for HTTP Discovery Implementation:</strong></p>
+<ol>
+<li><strong>Endpoint Requirements:</strong></li>
+<li>Must be accessible from all cluster nodes</li>
+<li>Should return the complete list of all nodes in the cluster</li>
+<li>
+<p>Should include the node's own entry</p>
+</li>
+<li>
+<p><strong>Update Frequency:</strong></p>
+</li>
+<li>The system polls the endpoint periodically like every 2 seconds</li>
+<li>
+<p>Changes are detected and applied automatically</p>
+</li>
+<li>
+<p><strong>Error Handling:</strong></p>
+</li>
+<li>If the endpoint is unreachable, the node continues with the last known peer list</li>
+<li>HTTP errors (4xx, 5xx) are logged and the previous peer list is retained</li>
+</ol>
+<h2 id="identity-verification-types">Identity Verification Types</h2>
+<p>The <code>identity</code> field specifies how to verify a peer's TLS certificate:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Description</th>
+<th>Value Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dns</code></td>
+<td>Verify against DNS Subject Alternative Name (SAN)</td>
+<td><code>node1.cluster.local</code></td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>Verify against SAN by IP</td>
+<td></td>
+</tr>
+<tr>
+<td><code>spiffe</code></td>
+<td>Verify against SPIFFE ID</td>
+<td><code>spiffe://example.org/node1</code></td>
+</tr>
+</tbody>
+</table>
 
 
 

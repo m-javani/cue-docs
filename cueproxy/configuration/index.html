@@ -438,6 +438,8 @@
       
         
       
+        
+      
     
     
     
@@ -528,6 +530,34 @@
     
   
     Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cue/discovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discovery
   
 
     
@@ -800,6 +830,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -842,6 +874,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -850,18 +884,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#full-configuration-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -871,31 +893,15 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#address-resolver-types" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#discovery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Address Resolver Types
+        Discovery
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tls-verifier-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TLS Verifier Types
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1100,9 +1106,7 @@
   
 
 
-  <h1>Configuration</h1>
-
-<h2 id="configuration">Configuration</h2>
+<h1 id="configuration">Configuration</h1>
 <h3 id="full-configuration-reference">Full Configuration Reference</h3>
 <pre><code class="language-yaml">api:
   host: &quot;0.0.0.0&quot;
@@ -1114,97 +1118,56 @@
   ws_write_timeout_sec: 30
   ws_read_limit_bytes: 32768 # 32KB
   default_max_inflights: 10
-  auth_path: &quot;config/auth.yml&quot;
-  # TLS settings for API (HTTP/WebSocket)
-  tls_enabled: false  # Set to true to enable HTTPS
+  auth_path: &quot;./auth.yml&quot;
+  tls_enabled: false  # Set to true to enable HTTPS for API
   cert_path: &quot;certs/api-cert.pem&quot;
   key_path: &quot;certs/api-key.pem&quot;
-  ca_path: &quot;certs/api-ca.pem&quot;
 
 cluster:
   quic_addr: &quot;0.0.0.0&quot;
   quic_port: 8322
-  cluster_seeds:
-    - cue-node-1:8322
-    - cue-node-2:8322
-    - cue-node-3:8322
-  # TLS settings for Cluster (QUIC)
   cert_path: &quot;certs/cluster-cert.pem&quot;
   key_path: &quot;certs/cluster-key.pem&quot;
   ca_path: &quot;certs/cluster-ca.pem&quot;
-  address_resolver:
-    type: static  # static, dns, service
-    config:
-      port: 8322
-      # For static resolver:
-      # peers:
-      #   cue-node-1: &quot;192.168.1.10:8322&quot;
-      #   cue-node-2: &quot;192.168.1.11:8322&quot;
-      # For dns resolver:
-      # domain: &quot;cue-cluster.local&quot;
-  tls_verifier:
-    type: cn  # cn, dns, spiffe
-    config:
-      # For dns verifier:
-      # domain: &quot;cluster.local&quot;
-      # For spiffe verifier:
-      # trust_domain: &quot;example.org&quot;
-      # namespace: &quot;default&quot;  # optional
+  discovery_yml_path: &quot;./discovery.yml&quot;  # Bootstrap discovery file
+  cluster_api_port: 8321  # Port for cluster API (topology updates)
 </code></pre>
-<h3 id="address-resolver-types">Address Resolver Types</h3>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-<th>Config</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>static</code></td>
-<td>Fixed list of node addresses</td>
-<td><code>peers: {node1: "192.168.1.10:8322"}</code></td>
-</tr>
-<tr>
-<td><code>dns</code></td>
-<td>DNS SRV record resolution</td>
-<td><code>domain: "cue-cluster.local"</code></td>
-</tr>
-<tr>
-<td><code>service</code></td>
-<td>Service discovery (Consul/Nomad)</td>
-<td>TBD</td>
-</tr>
-</tbody>
-</table>
-<h3 id="tls-verifier-types">TLS Verifier Types</h3>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-<th>Config</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>cn</code></td>
-<td>Verify Common Name</td>
-<td>None</td>
-</tr>
-<tr>
-<td><code>dns</code></td>
-<td>Verify DNS name</td>
-<td><code>domain: "cluster.local"</code></td>
-</tr>
-<tr>
-<td><code>spiffe</code></td>
-<td>SPIFFE ID verification</td>
-<td><code>trust_domain: "example.org"</code></td>
-</tr>
-</tbody>
-</table>
+<h3 id="discovery">Discovery</h3>
+<p>The proxy uses a discovery file to bootstrap its connection to the cluster. At startup, it reads the discovery file to locate at least one active cluster node and perform TLS verification. The file follows the same format as the Cue cluster discovery:</p>
+<pre><code class="language-yaml">nodes:
+  - node_id: node1
+    ip: 10.0.1.11
+    identity:
+      kind: dns
+      value: node1.localhost
+
+  - node_id: node2
+    ip: 10.0.1.12
+    identity:
+      kind: dns
+      value: node2.localhost
+
+  - node_id: node3
+    ip: 10.0.1.13
+    identity:
+      kind: dns
+      value: node3.localhost
+</code></pre>
+<p><strong>Discovery Fields:</strong>
+- <code>node_id</code>: Node identifier matching the cluster seed names
+- <code>ip</code>: IP address or hostname of the cluster node
+- <code>identity</code>: TLS certificate verification information
+  - <code>kind</code>: Identity verification type: <code>dns</code>, <code>ip</code>, or <code>spiffe</code>
+  - <code>value</code>: Expected value to match against the certificate's SAN</p>
+<p><strong>Bootstrap Process:</strong>
+1. Proxy reads <code>discovery_yml_path</code> at startup
+2. Attempts to connect to nodes listed in the discovery file (in order)
+3. Verifies each node's TLS certificate matches the specified identity
+4. Once connected, establishes QUIC communication with the cluster</p>
+<p><strong>Topology Awareness:</strong>
+After initial connection, the proxy receives topology updates from the cluster leader. When the cluster topology changes (nodes added/removed), the leader pushes updates to connected proxies. Proxies then fetch the complete discovery list from the leader's API endpoint (port <code>cluster_api_port</code>) to stay synchronized with the current cluster state. This ensures proxies are always topology-aware without requiring external HTTP discovery endpoints.</p>
+<p><strong>Note:</strong> At least one node in the discovery file must be reachable and active for the proxy to bootstrap successfully.</p>
+<hr />
 
 
 
