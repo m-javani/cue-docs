@@ -11,6 +11,18 @@
 
 ---
 
+The fastest way to try Cue is with the **pre-packaged demo environment**.
+
+## Download
+
+[Download the demo zip here](../assets/demo/demo.zip)
+
+```bash
+cd demo
+```
+
+---
+
 ## 1. Start the Demo
 
 ```bash
@@ -47,7 +59,7 @@ You will see the jobs arriving in real-time in Terminal 1.
 ---
 
 
-## 3. Stop the ccluster and proxy
+## 3. Stop the containers
 
 ```bash
 make stop
