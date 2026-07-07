@@ -970,6 +970,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Download
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-start-the-demo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1020,10 +1031,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-stop-the-ccluster-and-proxy" class="md-nav__link">
+  <a href="#3-stop-the-containers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Stop the ccluster and proxy
+        3. Stop the containers
       
     </span>
   </a>
@@ -1133,6 +1144,12 @@
   pip3 install websockets</code></li>
 </ul>
 <hr />
+<p>The fastest way to try Cue is with the <strong>pre-packaged demo environment</strong>.</p>
+<h2 id="download">Download</h2>
+<p><a href="../assets/demo/demo.zip">Download the demo zip here</a></p>
+<pre><code class="language-bash">cd demo
+</code></pre>
+<hr />
 <h2 id="1-start-the-demo">1. Start the Demo</h2>
 <pre><code class="language-bash">make start
 </code></pre>
@@ -1155,7 +1172,7 @@ make job topic=orders payload='{&quot;order_id&quot;: 2, &quot;amount&quot;: 49.
 </code></pre>
 <p>You will see the jobs arriving in real-time in Terminal 1.</p>
 <hr />
-<h2 id="3-stop-the-ccluster-and-proxy">3. Stop the ccluster and proxy</h2>
+<h2 id="3-stop-the-containers">3. Stop the containers</h2>
 <pre><code class="language-bash">make stop
 </code></pre>
 <hr />
