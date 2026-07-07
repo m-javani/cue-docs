@@ -76,7 +76,7 @@ services:
       - ./configs/cueproxy:/opt/cueproxy/configs:ro
     # No tmpfs needed for proxy
     command: >
-      --config /opt/cueproxy/configs/config.yml --auth-file /opt/cueproxy/configs/auth.yml --proxy-id proxy1 --api-host 0.0.0.0 --api-port 8080 --cluster-cert /certs/proxy1/cert.pem --cluster-key /certs/proxy1/key.pem --cluster-ca /certs/ca_cert.pem --seed node1,node2,node3 --discovery-yml /opt/cueproxy/configs/discovery.yml --log-level info
+      --config /opt/cueproxy/configs/config.yml --auth-file /opt/cueproxy/configs/auth.yml --proxy-id proxy1 --api-host 0.0.0.0 --api-port 8080 --cluster-cert /certs/proxy1/cert.pem --cluster-key /certs/proxy1/key.pem --cluster-ca /certs/ca_cert.pem --discovery-yml /opt/cueproxy/configs/discovery.yml --log-level info
     cap_add:
       - NET_ADMIN
 

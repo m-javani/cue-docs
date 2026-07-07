@@ -52,6 +52,7 @@ nav:
   - Cue:
     - Overview: cue/overview.md
     - Configuration: cue/configuration.md
+    - Discovery: cue/discovery.md
     - Cluster Management: cue/cluster-management.md
     - Monitoring: cue/monitoring.md
     - Deployment: cue/deployment.md

@@ -15,14 +15,19 @@ cluster:
   key_path: "./certs/node1_key.pem"   # TLS private key
   ca_path: "./certs/ca_cert.pem"      # CA certificate for mTLS
   initial_voters: ["node1","node2","node3"]  # Initial Raft voters
-  peers: ["node1","node2","node3"]    # Peer nodes for discovery
   snapshot_interval_sec: 60           # Snapshot interval in seconds
   snapshot_trigger_count: 10000       # Snapshot trigger entry count
   wal_flush_threshold: 1000           # WAL flush threshold
   dlq_max_size_bytes: 10485760        # Max DLQ size (10MB)
   raft_tick_ms: 100                   # Raft tick interval (100ms)
-  raft_heartbeat_tick: 5              # Heartbeat tick multiplier (500ms)
-  raft_election_tick: 50              # Election tick multiplier (5s)
+  raft_heartbeat_tick: 3              # Heartbeat tick multiplier (300ms)
+  raft_election_tick: 30              # Election tick multiplier (3s)
+  
+  # Discovery configuration
+  discovery_kind: "static"            # "static" or "http"
+  discovery_yml_path: "./discovery.yml"  # Required for static discovery
+  discovery_http_host: ""             # HTTP endpoint URL (required for http discovery)
+                                      # Example: "http://discovery-service:8080"
 
 # Proxy (external CueProxy communication)
 proxy:
@@ -47,9 +52,8 @@ wal:
 # Partition settings
 partition:
   active_queue_capacity: 1000000      # Max jobs per partition
-  retry_base_delay_ms: 1000           # Initial retry delay (1s)
   max_retries: 3                      # Max retry attempts
-  max_backoff_ms: 60000               # Max backoff (60s)
+  max_backoff_sec: 2                  # Maximum backoff in seconds
   dispatch_batch_size: 128            # Batch size for dispatch
   dlq_max_bytes: 10485760             # DLQ max size (10MB)
   dlq_max_age_ms: 86400000            # DLQ max age (24 hours)
@@ -59,38 +63,26 @@ logging:
   level: "info"                       # debug, info, warn, error
   format: "json"                      # json or text
   output_path: "stdout"               # stdout, stderr, or file path
-
-# Service discovery
-address_resolver:
-  type: static                        # static, dns, service
-  config:
-    peers:                            # For static resolver
-      node1: "192.168.1.10:8323"
-      node2: "192.168.1.11:8323"
-      node3: "192.168.1.12:8323"
-    # domain: "cluster.local"         # For DNS resolver
-    # port: 8323
-
-# TLS verification
-tls_verifier:
-  type: cn                            # cn, dns, spiffe
-  # config:
-  #   domain: "cluster.local"         # For DNS verifier
-  #   trust_domain: "example.org"     # For SPIFFE verifier
 ```
 
-### Address Resolver Types
+---
 
-| Type | Description | Config |
-|------|-------------|--------|
-| `static` | Fixed mapping of node IDs to addresses | `peers: {node1: "192.168.1.10:8323"}` |
-| `dns` | DNS SRV record resolution | `domain: "cue-cluster.local"` |
-| `service` | Service discovery (Consul/Nomad) | None needed |
+### Discovery Configuration
 
-### TLS Verifier Types
+The cluster uses a discovery mechanism to locate peer nodes and verify their identities. The discovery system is pluggable and supports two modes:
 
-| Type | Description | Config |
-|------|-------------|--------|
-| `cn` | Verify Common Name matches node ID | None |
-| `dns` | Verify DNS name | `domain: "cluster.local"` |
-| `spiffe` | SPIFFE ID verification | `trust_domain: "example.org"` |
+- **Static Discovery**: Reads peer information from a local YAML file
+- **HTTP Discovery**: Queries an HTTP endpoint that you implement based on your infrastructure
+
+The discovery configuration is specified under the `cluster` section in config yaml file:
+
+```yaml
+cluster:
+  discovery_kind: "static"            # or "http"
+  discovery_yml_path: "./discovery.yml"  # For static discovery
+  discovery_http_host: "http://discovery-service:8080"  # For HTTP discovery
+```
+
+For detailed information about the discovery protocol, file format, and HTTP API specification, see the [Discovery](./discovery.md) page.
+
+---

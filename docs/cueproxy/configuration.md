@@ -1,4 +1,4 @@
-## Configuration
+# Configuration
 
 ### Full Configuration Reference
 
@@ -13,56 +13,62 @@ api:
   ws_write_timeout_sec: 30
   ws_read_limit_bytes: 32768 # 32KB
   default_max_inflights: 10
-  auth_path: "config/auth.yml"
-  # TLS settings for API (HTTP/WebSocket)
-  tls_enabled: false  # Set to true to enable HTTPS
+  auth_path: "./auth.yml"
+  tls_enabled: false  # Set to true to enable HTTPS for API
   cert_path: "certs/api-cert.pem"
   key_path: "certs/api-key.pem"
-  ca_path: "certs/api-ca.pem"
 
 cluster:
   quic_addr: "0.0.0.0"
   quic_port: 8322
-  cluster_seeds:
-    - cue-node-1:8322
-    - cue-node-2:8322
-    - cue-node-3:8322
-  # TLS settings for Cluster (QUIC)
   cert_path: "certs/cluster-cert.pem"
   key_path: "certs/cluster-key.pem"
   ca_path: "certs/cluster-ca.pem"
-  address_resolver:
-    type: static  # static, dns, service
-    config:
-      port: 8322
-      # For static resolver:
-      # peers:
-      #   cue-node-1: "192.168.1.10:8322"
-      #   cue-node-2: "192.168.1.11:8322"
-      # For dns resolver:
-      # domain: "cue-cluster.local"
-  tls_verifier:
-    type: cn  # cn, dns, spiffe
-    config:
-      # For dns verifier:
-      # domain: "cluster.local"
-      # For spiffe verifier:
-      # trust_domain: "example.org"
-      # namespace: "default"  # optional
+  discovery_yml_path: "./discovery.yml"  # Bootstrap discovery file
+  cluster_api_port: 8321  # Port for cluster API (topology updates)
 ```
 
-### Address Resolver Types
+### Discovery
 
-| Type | Description | Config |
-|------|-------------|--------|
-| `static` | Fixed list of node addresses | `peers: {node1: "192.168.1.10:8322"}` |
-| `dns` | DNS SRV record resolution | `domain: "cue-cluster.local"` |
-| `service` | Service discovery (Consul/Nomad) | TBD |
+The proxy uses a discovery file to bootstrap its connection to the cluster. At startup, it reads the discovery file to locate at least one active cluster node and perform TLS verification. The file follows the same format as the Cue cluster discovery:
 
-### TLS Verifier Types
+```yaml
+nodes:
+  - node_id: node1
+    ip: 10.0.1.11
+    identity:
+      kind: dns
+      value: node1.localhost
 
-| Type | Description | Config |
-|------|-------------|--------|
-| `cn` | Verify Common Name | None |
-| `dns` | Verify DNS name | `domain: "cluster.local"` |
-| `spiffe` | SPIFFE ID verification | `trust_domain: "example.org"` |
+  - node_id: node2
+    ip: 10.0.1.12
+    identity:
+      kind: dns
+      value: node2.localhost
+
+  - node_id: node3
+    ip: 10.0.1.13
+    identity:
+      kind: dns
+      value: node3.localhost
+```
+
+**Discovery Fields:**
+- `node_id`: Node identifier matching the cluster seed names
+- `ip`: IP address or hostname of the cluster node
+- `identity`: TLS certificate verification information
+  - `kind`: Identity verification type: `dns`, `ip`, or `spiffe`
+  - `value`: Expected value to match against the certificate's SAN
+
+**Bootstrap Process:**
+1. Proxy reads `discovery_yml_path` at startup
+2. Attempts to connect to nodes listed in the discovery file (in order)
+3. Verifies each node's TLS certificate matches the specified identity
+4. Once connected, establishes QUIC communication with the cluster
+
+**Topology Awareness:**
+After initial connection, the proxy receives topology updates from the cluster leader. When the cluster topology changes (nodes added/removed), the leader pushes updates to connected proxies. Proxies then fetch the complete discovery list from the leader's API endpoint (port `cluster_api_port`) to stay synchronized with the current cluster state. This ensures proxies are always topology-aware without requiring external HTTP discovery endpoints.
+
+**Note:** At least one node in the discovery file must be reachable and active for the proxy to bootstrap successfully.
+
+---
