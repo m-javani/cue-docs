@@ -884,6 +884,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#network-identity-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Identity Resolution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#full-configuration-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -899,6 +910,45 @@
     <span class="md-ellipsis">
       
         Discovery
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Discovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identity-verification-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity Verification Types
       
     </span>
   </a>
@@ -1107,6 +1157,10 @@
 
 
 <h1 id="configuration">Configuration</h1>
+<hr />
+<h3 id="network-identity-resolution">Network Identity Resolution</h3>
+<p>Proxies use each node's node_id as its network identity when establishing upstream connections (e.g., node1:8322), and this identifier should be treated as the canonical service identity for routing, service mesh registration, and discovery integration (Istio, Consul, etcd, etc.). If your infrastructure does not provide a service mesh or internal DNS resolution, the host field serves as the fallback network address; CueProxy prioritizes host when explicitly configured, otherwise defaults to resolving the upstream via its node_id.</p>
+<hr />
 <h3 id="full-configuration-reference">Full Configuration Reference</h3>
 <pre><code class="language-yaml">api:
   host: &quot;0.0.0.0&quot;
@@ -1129,45 +1183,169 @@ cluster:
   cert_path: &quot;certs/cluster-cert.pem&quot;
   key_path: &quot;certs/cluster-key.pem&quot;
   ca_path: &quot;certs/cluster-ca.pem&quot;
-  discovery_yml_path: &quot;./discovery.yml&quot;  # Bootstrap discovery file
-  cluster_api_port: 8321  # Port for cluster API (topology updates)
+
+  # Discovery configuration
+  discovery_kind: &quot;static&quot;            # &quot;static&quot; or &quot;http&quot;
+  discovery_yml_path: &quot;./discovery.yml&quot;  # Required for static discovery
+  discovery_http_host: &quot;&quot;             # HTTP endpoint URL (required for http discovery)
+                                      # Example: &quot;http://discovery-service:8080&quot;
 </code></pre>
+<hr />
 <h3 id="discovery">Discovery</h3>
-<p>The proxy uses a discovery file to bootstrap its connection to the cluster. At startup, it reads the discovery file to locate at least one active cluster node and perform TLS verification. The file follows the same format as the Cue cluster discovery:</p>
+<p>The proxy uses the same discovery mechanism as Cue cluster nodes to locate peer nodes and verify their TLS identities. The discovery system is pluggable and supports two modes:</p>
+<ul>
+<li><strong>Static Discovery</strong>: Reads peer information from a local YAML file</li>
+<li><strong>HTTP Discovery</strong>: Queries an HTTP endpoint that you implement</li>
+</ul>
+<p>The discovery configuration is specified under the <code>cluster</code> section in the config file:</p>
+<pre><code class="language-yaml">cluster:
+  discovery_kind: &quot;static&quot;            # or &quot;http&quot;
+  discovery_yml_path: &quot;./discovery.yml&quot;  # For static discovery
+  discovery_http_host: &quot;http://discovery-service:8080&quot;  # For HTTP discovery
+</code></pre>
+<h4 id="static-discovery">Static Discovery</h4>
+<p>Static discovery reads peer information from a local YAML file. This is suitable for fixed, known cluster topologies where node addresses and identities don't change.</p>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-yaml">cluster:
+  discovery_kind: &quot;static&quot;
+  discovery_yml_path: &quot;./discovery.yml&quot;
+</code></pre>
+<p><strong>Discovery File Format (<code>discovery.yml</code>):</strong></p>
 <pre><code class="language-yaml">nodes:
   - node_id: node1
-    ip: 10.0.1.11
+    host: 10.0.1.11
     identity:
       kind: dns
       value: node1.localhost
 
   - node_id: node2
-    ip: 10.0.1.12
+    host: 10.0.1.12
     identity:
       kind: dns
       value: node2.localhost
 
   - node_id: node3
-    ip: 10.0.1.13
+    host: 10.0.1.13
     identity:
       kind: dns
       value: node3.localhost
 </code></pre>
-<p><strong>Discovery Fields:</strong>
-- <code>node_id</code>: Node identifier matching the cluster seed names
-- <code>ip</code>: IP address or hostname of the cluster node
+<p><strong>File Fields:</strong>
+- <code>node_id</code>: Unique identifier matching the node's configured <code>node_id</code>
+- <code>host</code>: IP address or hostname of the node
 - <code>identity</code>: TLS certificate verification information
-  - <code>kind</code>: Identity verification type: <code>dns</code>, <code>ip</code>, or <code>spiffe</code>
-  - <code>value</code>: Expected value to match against the certificate's SAN</p>
-<p><strong>Bootstrap Process:</strong>
-1. Proxy reads <code>discovery_yml_path</code> at startup
-2. Attempts to connect to nodes listed in the discovery file (in order)
-3. Verifies each node's TLS certificate matches the specified identity
-4. Once connected, establishes QUIC communication with the cluster</p>
-<p><strong>Topology Awareness:</strong>
-After initial connection, the proxy receives topology updates from the cluster leader. When the cluster topology changes (nodes added/removed), the leader pushes updates to connected proxies. Proxies then fetch the complete discovery list from the leader's API endpoint (port <code>cluster_api_port</code>) to stay synchronized with the current cluster state. This ensures proxies are always topology-aware without requiring external HTTP discovery endpoints.</p>
-<p><strong>Note:</strong> At least one node in the discovery file must be reachable and active for the proxy to bootstrap successfully.</p>
+  - <code>kind</code>: Type of identity check (<code>dns</code>, <code>ip</code>, or <code>spiffe</code>)
+  - <code>value</code>: The expected value to match against the certificate's SAN</p>
+<h4 id="http-discovery">HTTP Discovery</h4>
+<p>HTTP discovery queries an external HTTP endpoint that you implement. This is ideal for dynamic environments where:
+- Nodes come and go (auto-scaling)
+- IP addresses change frequently (cloud environments)
+- TLS certificates are dynamically issued
+- You want to centralize cluster membership information</p>
+<p><strong>Configuration:</strong></p>
+<pre><code class="language-yaml">cluster:
+  discovery_kind: &quot;http&quot;
+  discovery_http_host: &quot;http://discovery-service:8080&quot;
+</code></pre>
+<p><strong>HTTP Request:</strong>
+- <strong>Method</strong>: GET
+- <strong>Path</strong>: <code>/peers</code>
+- <strong>Query String</strong>: <code>?client=cueproxy</code> (the proxy always sends this)
+- <strong>Full URL</strong>: <code>{discovery_http_host}/peers?client=cueproxy</code>
+- <strong>Headers</strong>: None required</p>
+<p><strong>HTTP Response Format:</strong>
+The endpoint must return a JSON response with the following structure:</p>
+<pre><code class="language-json">{
+  &quot;nodes&quot;: [
+    {
+      &quot;node_id&quot;: &quot;node1&quot;,
+      &quot;host&quot;: &quot;10.0.1.11&quot;,
+      &quot;identity&quot;: {
+        &quot;kind&quot;: &quot;dns&quot;,
+        &quot;value&quot;: &quot;node1.localhost&quot;
+      }
+    },
+    {
+      &quot;node_id&quot;: &quot;node2&quot;,
+      &quot;host&quot;: &quot;10.0.1.12&quot;,
+      &quot;identity&quot;: {
+        &quot;kind&quot;: &quot;dns&quot;,
+        &quot;value&quot;: &quot;node2.localhost&quot;
+      }
+    },
+    {
+      &quot;node_id&quot;: &quot;node3&quot;,
+      &quot;host&quot;: &quot;10.0.1.13&quot;,
+      &quot;identity&quot;: {
+        &quot;kind&quot;: &quot;dns&quot;,
+        &quot;value&quot;: &quot;node3.localhost&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<p><strong>Response Fields:</strong>
+- <code>nodes</code> (array): List of known nodes in the cluster
+  - <code>node_id</code> (string): Unique node identifier — should match node ids used in cluster
+  - <code>host</code> (string): IP address or hostname where the node listens for cluster traffic
+  - <code>identity</code> (object): TLS certificate verification information
+    - <code>kind</code> (string): Identity verification type: <code>dns</code>, <code>ip</code>, or <code>spiffe</code>
+    - <code>value</code> (string): Expected value to match against the certificate</p>
+<p><strong>Client-Specific Views:</strong>
+The discovery endpoint receives a <code>client</code> query parameter indicating the requester:
+- <code>?client=cue</code> — Cue cluster nodes
+- <code>?client=cueproxy</code> — CueProxy instances</p>
+<p>The endpoint may return different <code>host</code> values for each client. For example, Cue nodes may use internal network addresses (e.g., <code>10.0.1.11</code>), while proxies may need externally routable addresses (e.g., <code>node1.public.example.com</code>). The identity verification (<code>kind</code> and <code>value</code>) typically remains the same.</p>
+<p><strong>Best Practices for HTTP Discovery Implementation:</strong></p>
+<ol>
+<li><strong>Endpoint Requirements:</strong></li>
+<li>Must be accessible from all proxy instances</li>
+<li>Should return the complete list of all nodes in the cluster</li>
+<li>
+<p>Should include each node's own entry</p>
+</li>
+<li>
+<p><strong>Update Frequency:</strong></p>
+</li>
+<li>The system polls the endpoint periodically (approximately every 2 seconds)</li>
+<li>
+<p>Changes are detected and applied automatically</p>
+</li>
+<li>
+<p><strong>Error Handling:</strong></p>
+</li>
+<li>If the endpoint is unreachable, the proxy continues with the last known peer list</li>
+<li>HTTP errors (4xx, 5xx) are logged and the previous peer list is retained</li>
+</ol>
 <hr />
+<h3 id="identity-verification-types">Identity Verification Types</h3>
+<p>The <code>identity</code> field specifies how to verify a peer's TLS certificate:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Description</th>
+<th>Value Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dns</code></td>
+<td>Verify against DNS Subject Alternative Name (SAN)</td>
+<td><code>node1.cluster.local</code></td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>Verify against SAN by IP</td>
+<td><code>10.0.1.11</code></td>
+</tr>
+<tr>
+<td><code>spiffe</code></td>
+<td>Verify against SPIFFE ID</td>
+<td><code>spiffe://example.org/node1</code></td>
+</tr>
+</tbody>
+</table>
 
 
 
