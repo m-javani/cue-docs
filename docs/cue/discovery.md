@@ -5,8 +5,11 @@ The discovery system provides a pluggable mechanism for nodes to discover peer n
 
 ## Overview
 
+Nodes use their own node_id as their network identity when establishing connections to peers (e.g., node1:8323), and this identifier should be treated as the canonical service identity for routing, service mesh registration, and discovery integration (Istio, Consul, etcd, etc.). If your infrastructure does not provide a service mesh or internal DNS resolution, the host field serves as the fallback network address; Cue nodes prioritize host when explicitly configured, otherwise default to resolving the peer via its node_id.
+
+
 Each node in the cluster needs to know:
-1. The network address (IP:port) of every other peer node
+1. The network address (host:port) of every other peer node
 2. The expected identity (subject alternative name) in each peer's TLS certificate
 
 The discovery system abstracts this information retrieval, supporting both static configurations and dynamic HTTP-based discovery.
@@ -28,19 +31,19 @@ cluster:
 ```yaml
 nodes:
   - node_id: node1
-    ip: 10.0.1.11
+    host: 10.0.1.11
     identity:
       kind: dns
       value: node1.localhost
 
   - node_id: node2
-    ip: 10.0.1.12
+    host: 10.0.1.12
     identity:
       kind: dns
       value: node2.localhost
 
   - node_id: node3
-    ip: 10.0.1.13
+    host: 10.0.1.13
     identity:
       kind: dns
       value: node3.localhost
@@ -48,7 +51,7 @@ nodes:
 
 **File Fields:**
 - `node_id`: Unique identifier matching the node's configured `node_id`
-- `ip`: IP address or hostname of the node
+- `host`: IP address or hostname of the node
 - `identity`: TLS certificate verification information
   - `kind`: Type of identity check (`dns`, `ip`, or `spiffe`)
   - `value`: The expected value to match against the certificate's SAN
@@ -82,7 +85,7 @@ The endpoint must return a JSON response with the following structure:
   "nodes": [
     {
       "node_id": "node1",
-      "ip": "10.0.1.11",
+      "host": "10.0.1.11",
       "identity": {
         "kind": "dns",
         "value": "node1.localhost"
@@ -90,7 +93,7 @@ The endpoint must return a JSON response with the following structure:
     },
     {
       "node_id": "node2",
-      "ip": "10.0.1.12",
+      "host": "10.0.1.12",
       "identity": {
         "kind": "dns",
         "value": "node2.localhost"
@@ -98,7 +101,7 @@ The endpoint must return a JSON response with the following structure:
     },
     {
       "node_id": "node3",
-      "ip": "10.0.1.13",
+      "host": "10.0.1.13",
       "identity": {
         "kind": "dns",
         "value": "node3.localhost"
@@ -111,7 +114,7 @@ The endpoint must return a JSON response with the following structure:
 **Response Fields:**
 - `nodes` (array): List of known nodes in the cluster
   - `node_id` (string): Unique node identifier - should match node ids used in cluster
-  - `ip` (string): IP address or hostname where the node listens for Raft traffic
+  - `host` (string): IP address or hostname where the node listens for Raft traffic
   - `identity` (object): TLS certificate verification information
     - `kind` (string): Identity verification type: `dns`, `ip`, or `spiffe`
     - `value` (string): Expected value to match against the certificate

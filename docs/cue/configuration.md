@@ -1,5 +1,12 @@
 # Configuration
 
+---
+
+### Network Identity Resolution 
+Nodes use their own node_id as their network identity when establishing connections to peers (e.g., node1:8323), and this identifier should be treated as the canonical service identity for routing, service mesh registration, and discovery integration (Istio, Consul, etcd, etc.). If your infrastructure does not provide a service mesh or internal DNS resolution, the host field serves as the fallback network address; Cue nodes prioritize host when explicitly configured, otherwise default to resolving the peer via its node_id.
+
+---
+
 ### Full Configuration Reference
 
 ```yaml
