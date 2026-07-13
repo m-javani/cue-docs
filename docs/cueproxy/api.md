@@ -11,7 +11,7 @@ Authorization: Bearer <token>
 
 **Submit Job**
 ```http
-POST /producer/job
+POST /producer/jobs
 Authorization: Bearer <token>
 {
   "job": {
